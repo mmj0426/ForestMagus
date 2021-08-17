@@ -11,16 +11,14 @@ public class ForestMagus : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
-        PrivateIncludePaths.AddRange(new string[]
-        {
-            Path.Combine(ModuleDirectory,"Private")
-        });
+        PrivateIncludePaths.Add(ModuleDirectory);
 
-        PublicIncludePaths.AddRange(new string[]
-        {
-            Path.Combine(ModuleDirectory, "Public"),
-            Path.Combine(ModuleDirectory, "Public/PlayerCharacter"),
-            Path.Combine(ModuleDirectory, "Public/GameMode")
-        });
+        PublicIncludePaths.Add(ModuleDirectory);
+
+        //PublicIncludePaths.AddRange(new string[]
+        //{
+        //    Path.Combine(ModuleDirectory, "Strcuts"),
+        //    Path.Combine(ModuleDirectory, "Content")
+        //});
     }
 }
