@@ -11,6 +11,7 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationYaw = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 
 	// 캐릭터 스켈레탈 메쉬 지정
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>

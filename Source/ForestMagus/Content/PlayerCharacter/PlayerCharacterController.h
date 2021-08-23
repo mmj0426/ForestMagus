@@ -24,9 +24,11 @@ private :
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Meta = (AllowprivateAccess = true))
 	class APlayerCharacter* FMPlayer;
 
-	// Movement
+	// 키보드 W,A,S,D
 	void MoveForward(float NewAxisValue);
 	void MoveRight(float NewAxisValue);
-	//void MoveForward(float NewAxisValue);
-	//void MoveForward(float NewAxisValue);
+
+	// 마우스 회전
+	void LookUp(float NewAxisValue);
+	void Turn(float NewAxisValue);
 };
