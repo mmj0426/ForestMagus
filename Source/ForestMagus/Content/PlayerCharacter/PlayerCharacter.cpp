@@ -21,7 +21,7 @@ APlayerCharacter::APlayerCharacter()
 		GetMesh()->SetSkeletalMesh(SK_PlayerCharacter.Object);
 	}
 
-	// 스프링 암 지정
+	// 스프링 암 세팅
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->SetRelativeRotation(FRotator::ZeroRotator);
@@ -34,11 +34,19 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->bInheritYaw = true;
 	SpringArm->bDoCollisionTest = true;
 
-	// 카메라 지정
+	// 카메라 세팅
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 	
+	// 애니메이션 세팅
+	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 
+	static ConstructorHelpers::FClassFinder<UAnimInstance>
+	Player_AnimBP(TEXT("/Game/Animations/PlayerCharacter/AnimBP_PlayerCharacter.AnimBP_PlayerCharacter_C"));
+	if (Player_AnimBP.Succeeded())
+	{
+		GetMesh()->SetAnimInstanceClass(Player_AnimBP.Class);
+	}
 
 }
 
