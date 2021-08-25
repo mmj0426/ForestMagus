@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ForestMagus/ForestMagus.h"
-#include "GameFramework/Character.h"
+#include "ForestMagus.h"
+#include "Structs/Character/BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class FORESTMAGUS_API APlayerCharacter : public ACharacter
+class FORESTMAGUS_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -16,14 +16,10 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
-
-public:	
-	
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
+public : 
 	// Camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class USpringArmComponent* SpringArm;
