@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CoreMinimal.h"
+#include "ForestMagus.h"
 #include "Animation/AnimInstance.h"
 #include "PlayerCharacterAnimInstance.generated.h"
 
@@ -16,9 +16,21 @@ public :
 	UPlayerCharacterAnimInstance();
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-protected :
 
+	void PlayAnimMontage(FString MontageName);
+
+protected :
+	
+	// 플레이어 속도
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Pawn)
 	float CurrentPawnSpeed;
-	
+
+	// 몽타주
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Montage)
+	TMap<FString, UAnimMontage*> MontageMap;
+
+	// 대쉬 애니메이션
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Dash)
+	UAnimMontage* DashMontage;
+
 };

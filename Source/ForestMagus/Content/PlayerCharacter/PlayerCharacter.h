@@ -17,7 +17,7 @@ protected:
 	
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void PostInitializeComponents() override;
 
 public : 
 	// Camera
@@ -26,5 +26,11 @@ public :
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UCameraComponent* Camera;
+
+	// Animation
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UPlayerCharacterAnimInstance* PlayerAnim;
+
+	void Dash();
 
 };

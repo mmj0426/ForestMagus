@@ -18,15 +18,20 @@ void APlayerCharacterController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
+	// 축 매핑 바인드
 	InputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerCharacterController::MoveForward);
 	InputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerCharacterController::MoveRight);
 
 	InputComponent->BindAxis(TEXT("LookUp"), this, &APlayerCharacterController::LookUp);
 	InputComponent->BindAxis(TEXT("Turn"), this, &APlayerCharacterController::Turn);
+
+	// 액션 매핑 바인드
+	InputComponent->BindAction(TEXT("Dash"),EInputEvent::IE_Pressed,this,&APlayerCharacterController::Dash);
 }
 
 void APlayerCharacterController::MoveForward(float NewAxisValue)
 {
+	MoveValue.X = NewAxisValue;
 	if (FMPlayer && NewAxisValue != 0.f)
 	{
 		FMPlayer->AddMovementInput(FRotationMatrix(FRotator(0.f, GetControlRotation().Yaw, 0.f)).GetUnitAxis(EAxis::X),NewAxisValue);
@@ -35,6 +40,7 @@ void APlayerCharacterController::MoveForward(float NewAxisValue)
 
 void APlayerCharacterController::MoveRight(float NewAxisValue)
 {
+	MoveValue.Y = NewAxisValue;
 	if (FMPlayer && NewAxisValue != 0.f)
 	{
 		FMPlayer->AddMovementInput(FRotationMatrix(FRotator(0.f, GetControlRotation().Yaw, 0.f)).GetUnitAxis(EAxis::Y), NewAxisValue);
@@ -55,4 +61,29 @@ void APlayerCharacterController::Turn(float NewAxisValue)
 	{
 		FMPlayer->AddControllerYawInput(NewAxisValue);
 	}
+}
+
+void APlayerCharacterController::RotateCharacter()
+{
+	int32 MoveValueX = static_cast<int32>(MoveValue.X);
+	int32 MoveValueY = static_cast<int32>(MoveValue.Y);
+
+	int32 RotationRate = 0;
+
+	if (MoveValueX != 0 && MoveValueY == 0)
+	{
+		RotationRate = MoveValueX < 0 ? 180 : 0;	
+	}
+	else
+	{
+		RotationRate = MoveValueY * (90 + -(MoveValueX * 45));
+	}
+
+	FMPlayer->SetActorRotation(FRotator(0.f, GetControlRotation().Yaw + RotationRate, 0.f));
+}
+
+void APlayerCharacterController::Dash()
+{
+	RotateCharacter();
+	FMPlayer->Dash();
 }

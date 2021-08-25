@@ -1,5 +1,6 @@
 
 #include "Content/PlayerCharacter/PlayerCharacter.h"
+#include "Content/PlayerCharacter/PlayerCharacterAnimInstance.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -11,7 +12,7 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationYaw = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
 	// 캐릭터 스켈레탈 메쉬 지정
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
@@ -62,9 +63,15 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 }
 
-void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APlayerCharacter::PostInitializeComponents()
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	Super::PostInitializeComponents();
 
+	PlayerAnim = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	FMCHECK(nullptr != PlayerAnim);
 }
 
+void APlayerCharacter::Dash()
+{
+	PlayerAnim->PlayAnimMontage(TEXT("Dash"));
+}
