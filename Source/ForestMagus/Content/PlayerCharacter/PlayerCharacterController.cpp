@@ -26,7 +26,7 @@ void APlayerCharacterController::SetupInputComponent()
 	InputComponent->BindAxis(TEXT("Turn"), this, &APlayerCharacterController::Turn);
 
 	// 액션 매핑 바인드
-	InputComponent->BindAction(TEXT("Dash"),EInputEvent::IE_Pressed,this,&APlayerCharacterController::Dash);
+	InputComponent->BindAction(TEXT("Teleportation"),EInputEvent::IE_Pressed,this,&APlayerCharacterController::Teleportation);
 }
 
 void APlayerCharacterController::MoveForward(float NewAxisValue)
@@ -82,8 +82,9 @@ void APlayerCharacterController::RotateCharacter()
 	FMPlayer->SetActorRotation(FRotator(0.f, GetControlRotation().Yaw + RotationRate, 0.f));
 }
 
-void APlayerCharacterController::Dash()
+void APlayerCharacterController::Teleportation()
 {
 	RotateCharacter();
-	FMPlayer->Dash();
+
+	FMPlayer->Teleportation();
 }

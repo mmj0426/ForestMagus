@@ -2,8 +2,10 @@
 
 #include "ForestMagus/ForestMagus.h"
 #include "GameFramework/PlayerController.h"
-#include "PlayerCharacterController.generated.h"
 
+#include "Components/TimelineComponent.h"
+
+#include "PlayerCharacterController.generated.h"
 /**
  * 
  */
@@ -37,7 +39,7 @@ private :
 
 	// 스페이스 바
 	void RotateCharacter();
-	void Dash();
+	void Teleportation();
 
 
 };

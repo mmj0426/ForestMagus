@@ -51,6 +51,14 @@ APlayerCharacter::APlayerCharacter()
 
 }
 
+void APlayerCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	PlayerAnim = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	FMCHECK(nullptr != PlayerAnim);
+}
+
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -61,17 +69,4 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void APlayerCharacter::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-
-	PlayerAnim = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-	FMCHECK(nullptr != PlayerAnim);
-}
-
-void APlayerCharacter::Dash()
-{
-	PlayerAnim->PlayAnimMontage(TEXT("Dash"));
 }

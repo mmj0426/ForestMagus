@@ -15,22 +15,23 @@ public:
 
 protected:
 	
+	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	virtual void PostInitializeComponents() override;
 
 public : 
-	// Camera
+	// 카메라
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UCameraComponent* Camera;
 
-	// Animation
+	// 애니메이션
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UPlayerCharacterAnimInstance* PlayerAnim;
 
-	void Dash();
-
+	// 텔레포트 - 블루프린트 함수 정의
+	UFUNCTION(BlueprintImplementableEvent,Category = Teleportation)
+	void Teleportation();
 };
