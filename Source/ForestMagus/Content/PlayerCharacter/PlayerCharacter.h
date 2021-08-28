@@ -27,6 +27,10 @@ public :
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UCameraComponent* Camera;
 
+	// 무기
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
+	class UStaticMeshComponent* WeaponMesh;
+
 	// 애니메이션
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UPlayerCharacterAnimInstance* PlayerAnim;

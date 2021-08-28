@@ -16,7 +16,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// 캐릭터 스켈레탈 메쉬 지정
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-	SK_PlayerCharacter(TEXT("/Game/Characters/PlayerCharacter/SK_Cleric.SK_Cleric"));
+	SK_PlayerCharacter(TEXT("/Game/Characters/PlayerCharacter/SK_PlayerCharacter.SK_PlayerCharacter"));
 	if (SK_PlayerCharacter.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(SK_PlayerCharacter.Object);
@@ -47,6 +47,21 @@ APlayerCharacter::APlayerCharacter()
 	if (Player_AnimBP.Succeeded())
 	{
 		GetMesh()->SetAnimInstanceClass(Player_AnimBP.Class);
+	}
+
+	// 소켓에 무기 세팅
+	FName WeaponSocket(TEXT("Weapon"));
+
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+	WeaponMesh->SetupAttachment(GetMesh(),WeaponSocket);
+	WeaponMesh->SetCollisionProfileName("NoCollision");
+
+	// 무기 메쉬 세팅
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>
+	SM_StaffWeapon(TEXT("/Game/Characters/PlayerCharacter/SM_Weapon.SM_Weapon"));
+	if (SM_StaffWeapon.Succeeded())
+	{
+		WeaponMesh->SetStaticMesh(SM_StaffWeapon.Object);
 	}
 
 }

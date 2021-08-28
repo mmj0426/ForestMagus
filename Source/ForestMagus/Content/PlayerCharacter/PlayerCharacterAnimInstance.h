@@ -29,8 +29,5 @@ protected :
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Montage)
 	TMap<FString, UAnimMontage*> MontageMap;
 
-	// 대쉬 애니메이션
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Dash)
-	UAnimMontage* DashMontage;
 
 };
