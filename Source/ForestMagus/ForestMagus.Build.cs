@@ -1,3 +1,5 @@
+//copyright @¹ÎÁö
+
 using UnrealBuildTool;
 using System.IO;
 
@@ -9,7 +11,7 @@ public class ForestMagus : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+        PrivateDependencyModuleNames.AddRange(new string[] { "GameplayAbilities", "GameplayTags", "GameplayTasks" });
 
         PrivateIncludePaths.Add(ModuleDirectory);
 

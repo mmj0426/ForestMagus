@@ -1,6 +1,11 @@
+// copyright @¹ÎÁö
 
 #include "Content/PlayerCharacter/PlayerCharacter.h"
 #include "Content/PlayerCharacter/PlayerCharacterAnimInstance.h"
+
+#include "Structs/Abilities/FMAbilitySystemComponent.h"
+#include "Structs/Abilities/FMGameplayAbility.h"
+#include "Structs/Abilities/FMAttributeSet.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -64,6 +69,71 @@ APlayerCharacter::APlayerCharacter()
 		WeaponMesh->SetStaticMesh(SM_StaffWeapon.Object);
 	}
 
+	// ¾îºô¸®Æ¼ ½Ã½ºÅÛ
+	AbilitySystemComponent = CreateDefaultSubobject<UFMAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
+	Attributes = CreateDefaultSubobject<UFMAttributeSet>("Attributes");
+
+
+}
+
+UAbilitySystemComponent* APlayerCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+void APlayerCharacter::InitializeAttributes()
+{
+	if (AbilitySystemComponent && DefaultAttributeEffect)
+	{
+		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		EffectContext.AddSourceObject(this);
+
+		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributeEffect, 1, EffectContext);
+		if (SpecHandle.IsValid())
+		{
+			FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), AbilitySystemComponent);
+		}
+	}
+}
+
+void APlayerCharacter::GiveAbilities()
+{
+	if (HasAuthority() && AbilitySystemComponent)
+	{
+		for (TSubclassOf<UFMGameplayAbility>& StartupAbility : DefaultAbilities)
+		{
+			AbilitySystemComponent->GiveAbility(
+			FGameplayAbilitySpec(StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID),this));
+		}
+	}
+}
+
+void APlayerCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+
+	InitializeAttributes();
+	GiveAbilities();
+}
+
+void APlayerCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+	InitializeAttributes();
+
+	if (AbilitySystemComponent && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds("Confirm","Cancel", "EFMAbilityInputID",static_cast<int32>(EFMAbilityInputID::Confirm),static_cast<int32>(EFMAbilityInputID::Cancel));
+		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent,Binds);
+	}
 }
 
 void APlayerCharacter::PostInitializeComponents()
@@ -85,3 +155,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	if (AbilitySystemComponent && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds("Confirm", "Cancel", "EFMAbilityInputID", static_cast<int32>(EFMAbilityInputID::Confirm), static_cast<int32>(EFMAbilityInputID::Cancel));
+		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, Binds);
+	}
+}
+
