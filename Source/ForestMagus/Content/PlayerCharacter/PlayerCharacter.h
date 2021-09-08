@@ -63,7 +63,7 @@ public :
 
 protected : 
 	// 어빌리티 시스템
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UFMAbilitySystemComponent* AbilitySystemComponent;
 
 	UPROPERTY()
