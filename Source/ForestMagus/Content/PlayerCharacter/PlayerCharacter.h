@@ -4,14 +4,10 @@
 
 #include "ForestMagus.h"
 #include "Structs/Character/BaseCharacter.h"
-#include "AbilitySystemInterface.h"
-#include <GameplayEffectTypes.h>
 #include "PlayerCharacter.generated.h"
 
-class UFMAttributeSet;
-
 UCLASS()
-class FORESTMAGUS_API APlayerCharacter : public ABaseCharacter, public IAbilitySystemInterface
+class FORESTMAGUS_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -25,23 +21,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-public : 
-	//어빌리티 시스템
-	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
-	virtual void InitializeAttributes();
-	virtual void GiveAbilities();
-
 	virtual void PossessedBy(AController* NewController)override;
-	virtual void OnRep_PlayerState() override;
 
-	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly)
-	TSubclassOf<class UGameplayEffect> DefaultAttributeEffect;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	TArray<TSubclassOf<class UFMGameplayAbility>> DefaultAbilities;
-
+public:
 	// 카메라
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class USpringArmComponent* SpringArm;
@@ -60,13 +42,4 @@ public :
 	// 텔레포트 - 블루프린트 함수 정의
 	UFUNCTION(BlueprintImplementableEvent,Category = Teleportation)
 	void Teleportation();
-
-protected : 
-	// 어빌리티 시스템
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UFMAbilitySystemComponent* AbilitySystemComponent;
-
-	UPROPERTY()
-	class UFMAttributeSet* Attributes;
-
 };

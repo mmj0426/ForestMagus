@@ -11,4 +11,5 @@ enum class EFMAbilityInputID : uint8
 	Confirm,
 	Cancel,
 	BasicAttack
+	//QSkill
 };
