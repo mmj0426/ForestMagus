@@ -56,6 +56,10 @@ APlayerCharacter::APlayerCharacter()
 	CursorToWorld->DecalSize = FVector(48.0f, 96.0f, 96.0f);
 	CursorToWorld->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
 
+	CursorToWorld->SetHiddenInGame(true);
+
+	bCanShowCursorDecal = false;
+
 	// 애니메이션 세팅
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 
@@ -69,16 +73,16 @@ APlayerCharacter::APlayerCharacter()
 	// 소켓에 무기 세팅
 	FName WeaponSocket(TEXT("Weapon"));
 
-	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
-	WeaponMesh->SetupAttachment(GetMesh(), WeaponSocket);
-	WeaponMesh->SetCollisionProfileName("NoCollision");
+	StaffMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaffMesh"));
+	StaffMesh->SetupAttachment(GetMesh(), WeaponSocket);
+	StaffMesh->SetCollisionProfileName("NoCollision");
 
 	// 무기 메쉬 세팅
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
 		SM_StaffWeapon(TEXT("/Game/Characters/PlayerCharacter/SM_Weapon.SM_Weapon"));
 	if (SM_StaffWeapon.Succeeded())
 	{
-		WeaponMesh->SetStaticMesh(SM_StaffWeapon.Object);
+		StaffMesh->SetStaticMesh(SM_StaffWeapon.Object);
 	}
 }
 
@@ -104,7 +108,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (CursorToWorld != nullptr)
+	if (CursorToWorld != nullptr && bCanShowCursorDecal)
 	{
 		if (UWorld* World = GetWorld())
 		{

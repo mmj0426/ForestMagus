@@ -10,6 +10,7 @@ enum class EFMAbilityInputID : uint8
 	None,
 	Confirm,
 	Cancel,
-	FireBall
+	FireBall,
+	Meteor
 	//QSkill
 };

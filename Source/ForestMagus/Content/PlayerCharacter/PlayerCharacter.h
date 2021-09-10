@@ -35,7 +35,7 @@ public:
 
 	// 무기
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
-	class UStaticMeshComponent* WeaponMesh;
+	class UStaticMeshComponent* StaffMesh;
 
 	// 애니메이션
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -45,8 +45,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent,Category = Teleportation)
 	void Teleportation();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bCanShowCursorDecal;
+
 private : 
-	// 마우스 커서 데칼 표시 할 위치
+	// 마우스 커서 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDecalComponent* CursorToWorld;
 };

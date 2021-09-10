@@ -41,4 +41,7 @@ private :
 	void RotateCharacter();
 	void Teleportation();
 
+	void Q_Pressed();
+	void UseSkill();
+
 };
