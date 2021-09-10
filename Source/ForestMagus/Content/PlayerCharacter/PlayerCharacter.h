@@ -15,6 +15,8 @@ public:
 	
 	APlayerCharacter();
 
+	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
+
 protected:
 	
 	virtual void PostInitializeComponents() override;
@@ -42,4 +44,9 @@ public:
 	// 텔레포트 - 블루프린트 함수 정의
 	UFUNCTION(BlueprintImplementableEvent,Category = Teleportation)
 	void Teleportation();
+
+private : 
+	// 마우스 커서 데칼 표시 할 위치
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UDecalComponent* CursorToWorld;
 };

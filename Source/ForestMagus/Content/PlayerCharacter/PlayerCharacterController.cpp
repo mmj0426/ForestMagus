@@ -3,6 +3,8 @@
 
 #include "Content/PlayerCharacter/PlayerCharacter.h"
 
+#include "Runtime/Engine/Classes/Components/DecalComponent.h"
+
 void APlayerCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -12,6 +14,7 @@ void APlayerCharacterController::BeginPlay()
 
 void APlayerCharacterController::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 }
 
 void APlayerCharacterController::SetupInputComponent()
@@ -26,7 +29,7 @@ void APlayerCharacterController::SetupInputComponent()
 	InputComponent->BindAxis(TEXT("Turn"), this, &APlayerCharacterController::Turn);
 
 	// 액션 매핑 바인드
-	InputComponent->BindAction(TEXT("Teleportation"),EInputEvent::IE_Pressed,this,&APlayerCharacterController::Teleportation);
+	InputComponent->BindAction(TEXT("Teleportation"), EInputEvent::IE_Pressed, this, &APlayerCharacterController::Teleportation);
 }
 
 void APlayerCharacterController::MoveForward(float NewAxisValue)
@@ -34,7 +37,7 @@ void APlayerCharacterController::MoveForward(float NewAxisValue)
 	MoveValue.X = NewAxisValue;
 	if (FMPlayer && NewAxisValue != 0.f)
 	{
-		FMPlayer->AddMovementInput(FRotationMatrix(FRotator(0.f, GetControlRotation().Yaw, 0.f)).GetUnitAxis(EAxis::X),NewAxisValue);
+		FMPlayer->AddMovementInput(FRotationMatrix(FRotator(0.f, GetControlRotation().Yaw, 0.f)).GetUnitAxis(EAxis::X), NewAxisValue);
 	}
 }
 
@@ -72,7 +75,7 @@ void APlayerCharacterController::RotateCharacter()
 
 	if (MoveValueX != 0 && MoveValueY == 0)
 	{
-		RotationRate = MoveValueX < 0 ? 180 : 0;	
+		RotationRate = MoveValueX < 0 ? 180 : 0;
 	}
 	else
 	{

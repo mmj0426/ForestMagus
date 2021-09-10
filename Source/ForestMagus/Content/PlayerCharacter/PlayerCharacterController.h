@@ -41,5 +41,4 @@ private :
 	void RotateCharacter();
 	void Teleportation();
 
-
 };
