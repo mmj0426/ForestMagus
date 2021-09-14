@@ -46,6 +46,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	TArray<TSubclassOf<class UFMGameplayAbility>> DefaultAbilities;
 
+	// Meteor Test
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	TSubclassOf<UFMGameplayAbility>QSkillFragment;
+
 protected:
 	// 어빌리티 시스템
 

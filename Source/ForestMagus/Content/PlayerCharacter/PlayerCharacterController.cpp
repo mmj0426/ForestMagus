@@ -31,8 +31,6 @@ void APlayerCharacterController::SetupInputComponent()
 
 	// 액션 매핑 바인드
 	InputComponent->BindAction(TEXT("Teleportation"), EInputEvent::IE_Pressed, this, &APlayerCharacterController::Teleportation);
-	InputComponent->BindAction(TEXT("Meteor"), EInputEvent::IE_Pressed, this, &APlayerCharacterController::Q_Pressed);
-	InputComponent->BindAction(TEXT("UseSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacterController::UseSkill);
 }
 
 void APlayerCharacterController::MoveForward(float NewAxisValue)
@@ -93,16 +91,4 @@ void APlayerCharacterController::Teleportation()
 	RotateCharacter();
 
 	FMPlayer->Teleportation();
-}
-
-void APlayerCharacterController::Q_Pressed()
-{
-	FMPlayer->bCanShowCursorDecal = true;
-	FMPlayer->GetCursorToWorld()->SetHiddenInGame(false);
-}
-
-void APlayerCharacterController::UseSkill()
-{
-	FMPlayer->bCanShowCursorDecal = false;
-	FMPlayer->GetCursorToWorld()->SetHiddenInGame(true);
 }

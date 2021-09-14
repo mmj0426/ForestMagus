@@ -40,8 +40,4 @@ private :
 	// 스페이스 바
 	void RotateCharacter();
 	void Teleportation();
-
-	void Q_Pressed();
-	void UseSkill();
-
 };

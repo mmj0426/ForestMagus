@@ -7,6 +7,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PlayerController.h"
 
+#include "Structs/Abilities/FMAbilitySystemComponent.h"
+#include "Structs/Abilities/FMGameplayAbility.h"
+
+#include "AbilitySystemComponent.h"
 #include "Components/DecalComponent.h"
 #include "Camera/CameraComponent.h"
 
@@ -46,17 +50,17 @@ APlayerCharacter::APlayerCharacter()
 	Camera->SetupAttachment(SpringArm);
 
 	// 커서 위치에 데칼 생성
-	CursorToWorld = CreateDefaultSubobject<UDecalComponent>("CursorToWorld");
-	CursorToWorld->SetupAttachment(RootComponent);
+	RangeDecal = CreateDefaultSubobject<UDecalComponent>("RangeDecal");
+	RangeDecal->SetupAttachment(RootComponent);
 	static ConstructorHelpers::FObjectFinder<UMaterial> DecalMaterialAsset(TEXT("/Game/Materials/Decal/M_Cursor_Decal.M_Cursor_Decal"));
 	if (DecalMaterialAsset.Succeeded())
 	{
-		CursorToWorld->SetDecalMaterial(DecalMaterialAsset.Object);
+		RangeDecal->SetDecalMaterial(DecalMaterialAsset.Object);
 	}
-	CursorToWorld->DecalSize = FVector(48.0f, 96.0f, 96.0f);
-	CursorToWorld->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
+	RangeDecal->DecalSize = FVector(48.0f, 96.0f, 96.0f);
+	RangeDecal->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
 
-	CursorToWorld->SetHiddenInGame(true);
+	RangeDecal->SetHiddenInGame(true);
 
 	bCanShowCursorDecal = false;
 
@@ -91,6 +95,48 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
+void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	InputComponent->BindAction(TEXT("QSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Q_Pressed);
+}
+
+void APlayerCharacter::EndRangeSkill()
+{
+	bCanShowCursorDecal = false;
+	GetRangeDecal()->SetHiddenInGame(true);
+
+	//AbilitySystemComponent->ClearAbility(FGameplayAbilitySpecHandle());
+
+}
+
+void APlayerCharacter::Q_Pressed()
+{
+	if (nullptr != QSkillFragment)
+	{
+		// 프로젝타일형, 범위형 나누기
+
+		bCanShowCursorDecal = true;
+		GetRangeDecal()->SetHiddenInGame(false);
+
+		GiveAbilityForSkillFragment();
+	}
+	else
+	{
+		FMLOG(Warning, TEXT("Q Skill Fragment is nullptr"));
+	}
+}
+
+void APlayerCharacter::GiveAbilityForSkillFragment()
+{
+	if (HasAuthority() && AbilitySystemComponent)
+	{
+		AbilitySystemComponent->GiveAbility(
+			FGameplayAbilitySpec(QSkillFragment, GetCharacterLevel(), static_cast<int32>(QSkillFragment.GetDefaultObject()->AbilityInputID), this));
+	}
+}
+
 void APlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -108,34 +154,29 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (CursorToWorld != nullptr && bCanShowCursorDecal)
-	{
-		if (UWorld* World = GetWorld())
-		{
-			FHitResult HitResult;
-			FCollisionQueryParams Params(NAME_None, FCollisionQueryParams::GetUnknownStatId());
-			FVector StartLocation = Camera->GetComponentLocation();
-			FVector EndLocation = Camera->GetComponentRotation().Vector() * 2000.0f;
-			Params.AddIgnoredActor(this);
-			World->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility, Params);
-			FQuat SurfaceRotation = HitResult.ImpactNormal.ToOrientationRotator().Quaternion();
-			CursorToWorld->SetWorldLocationAndRotation(HitResult.Location, SurfaceRotation);
+	//if (RangeDecal != nullptr && bCanShowCursorDecal)
+	//{
+	//	if (UWorld* World = GetWorld())
+	//	{
+	//		FHitResult HitResult;
+	//		FCollisionQueryParams Params(NAME_None, FCollisionQueryParams::GetUnknownStatId());
+	//		FVector StartLocation = SpringArm->GetComponentLocation();
+	//		FVector EndLocation = SpringArm->GetComponentRotation().Vector() * 2000.0f;
+	//		Params.AddIgnoredActor(this);
+	//		World->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility, Params);
+	//		FQuat SurfaceRotation = HitResult.ImpactNormal.ToOrientationRotator().Quaternion();
+	//		RangeDecal->SetWorldLocationAndRotation(HitResult.Location, SurfaceRotation);
 
-		}
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
-		{
-			FHitResult TraceHitResult;
-			PC->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
-			FVector CursorFV = TraceHitResult.ImpactNormal;
-			FRotator CursorR = CursorFV.Rotation();
-			CursorToWorld->SetWorldLocation(TraceHitResult.Location);
-			CursorToWorld->SetWorldRotation(CursorR);
-		}
-	}
-}
-
-void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	//	}
+	//	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	//	{
+	//		FHitResult TraceHitResult;
+	//		PC->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
+	//		FVector CursorFV = TraceHitResult.ImpactNormal;
+	//		FRotator CursorR = CursorFV.Rotation();
+	//		RangeDecal->SetWorldLocation(TraceHitResult.Location);
+	//		RangeDecal->SetWorldRotation(CursorR);
+	//	}
+	//}
 }
 

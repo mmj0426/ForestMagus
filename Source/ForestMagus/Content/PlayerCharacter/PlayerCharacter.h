@@ -15,7 +15,7 @@ public:
 	
 	APlayerCharacter();
 
-	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
+	FORCEINLINE class UDecalComponent* GetRangeDecal() { return RangeDecal; }
 
 protected:
 	
@@ -45,11 +45,17 @@ public:
 	UFUNCTION(BlueprintImplementableEvent,Category = Teleportation)
 	void Teleportation();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanShowCursorDecal;
+
+	UFUNCTION(BlueprintCallable)
+	void EndRangeSkill();
 
 private : 
 	// 마우스 커서 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UDecalComponent* CursorToWorld;
+	class UDecalComponent* RangeDecal;
+
+	void Q_Pressed();
+	void GiveAbilityForSkillFragment();
 };
