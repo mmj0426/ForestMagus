@@ -51,6 +51,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndRangeSkill();
 
+	UFUNCTION(BlueprintCallable)
+	void HiddenRangeDecal();
+
 private : 
 	// 마우스 커서 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

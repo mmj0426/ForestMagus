@@ -50,6 +50,9 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<UFMGameplayAbility>QSkillFragment;
 
+	UFUNCTION(BlueprintPure)
+	float GetHealth();
+
 protected:
 	// 어빌리티 시스템
 

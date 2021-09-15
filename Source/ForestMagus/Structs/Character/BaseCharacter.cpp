@@ -107,6 +107,11 @@ void ABaseCharacter::ApplyGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEf
 	}
 }
 
+float ABaseCharacter::GetHealth()
+{
+	return Attributes->GetHealth();
+}
+
 int ABaseCharacter::GetCharacterLevel() const
 {
 	return CharacterLevel;
