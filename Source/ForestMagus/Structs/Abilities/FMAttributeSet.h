@@ -22,6 +22,10 @@ public :
 
 	UFMAttributeSet();
 
+	/* Attribue가 바뀌기전에 호출되는 이벤트함수 **/
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	/** GaemplayEffect가 적용된뒤 호출되는 이벤트 함수 */
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_Health)
@@ -40,8 +44,16 @@ public :
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UFMAttributeSet, MaxMana)
 
-protected : 
+	/**
+	* Damage는 일시적으로 사용되는 Attribue
+	* DamageExecution으로 계산되는 데미지를 저장한다.
+	* 저장된 데미지만큼 Health를 감소시킴
+	*/
+	UPROPERTY(BlueprintReadOnly, Category = "Damage")
+	FGameplayAttributeData Damage;
+	ATTRIBUTE_ACCESSORS(UFMAttributeSet, Damage)
 
+protected:
 	UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& OldValue);
 

@@ -107,6 +107,21 @@ void ABaseCharacter::ApplyGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEf
 	}
 }
 
+void ABaseCharacter::HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ABaseCharacter* InstigatorCharacter, AActor* DamageCauser)
+{
+	OnDamaged(DamageAmount, HitInfo, DamageTags, InstigatorCharacter, DamageCauser);
+}
+
+void ABaseCharacter::HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	OnHealthChanged(DeltaValue, EventTags);
+}
+
+void ABaseCharacter::HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	OnManaChanged(DeltaValue, EventTags);
+}
+
 float ABaseCharacter::GetHealth()
 {
 	return Attributes->GetHealth();
