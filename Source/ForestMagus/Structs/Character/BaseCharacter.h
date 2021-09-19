@@ -50,6 +50,10 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<UFMGameplayAbility>QSkillFragment;
 
+	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ABaseCharacter* InstigatorCharacter, AActor* DamageCauser);
+	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+	virtual void HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
 	UFUNCTION(BlueprintPure)
 	float GetHealth();
 
@@ -65,4 +69,15 @@ protected:
 
 	UPROPERTY()
 	class UFMAttributeSet* Attributes;
+
+
+	/** Event Functions */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDamaged(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ABaseCharacter* InstigatorCharacter, AActor* DamageCauser);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 };
