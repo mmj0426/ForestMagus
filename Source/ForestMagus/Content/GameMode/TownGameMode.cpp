@@ -1,6 +1,8 @@
 
 #include "Content/GameMode/TownGameMode.h"
 
+#include "GameFramework/HUD.h"
+
 #include "Content/PlayerCharacter/PlayerCharacter.h"
 #include "Content/PlayerCharacter/PlayerCharacterController.h"
 
@@ -12,4 +14,9 @@ ATownGameMode::ATownGameMode()
 	DefaultPawnClass = PlayerCharacter.Class;
 	
 	PlayerControllerClass = APlayerCharacterController::StaticClass();
+
+	static ConstructorHelpers::FClassFinder<AHUD>
+	HUD_Default(TEXT("/Game/Characters/HUD/HUD_Crosshair.HUD_Crosshair_C"));
+
+	HUDClass = HUD_Default.Class;
 }
