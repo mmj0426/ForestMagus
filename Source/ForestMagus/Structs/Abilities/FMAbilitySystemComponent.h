@@ -28,6 +28,5 @@ public:
 
 	//현재 캐릭터에 등록된 스킬을 태그로 구분해서 찾는다.
 	//반환은 ActiveAbilities에 Add해서 반환
-
 	void GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<UFMGameplayAbility*>& ActiveAbilities);
 };

@@ -105,8 +105,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::EndRangeSkill()
 {
 	// Clear Ability
-	auto ActivatableSkillArray = AbilitySystemComponent->GetActivatableAbilities();
-	AbilitySystemComponent->ClearAbility(ActivatableSkillArray[1].Handle);
+	//auto ActivatableSkillArray = AbilitySystemComponent->GetActivatableAbilities();
+	//AbilitySystemComponent->ClearAbility(ActivatableSkillArray[1].Handle);
 
 	FMLOG(Warning, TEXT("EndRangeSkill"));
 
