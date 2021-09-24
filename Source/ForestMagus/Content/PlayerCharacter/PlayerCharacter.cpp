@@ -108,6 +108,7 @@ void APlayerCharacter::EndRangeSkill()
 	//auto ActivatableSkillArray = AbilitySystemComponent->GetActivatableAbilities();
 	//AbilitySystemComponent->ClearAbility(ActivatableSkillArray[1].Handle);
 
+	
 	FMLOG(Warning, TEXT("EndRangeSkill"));
 
 }
@@ -139,8 +140,7 @@ void APlayerCharacter::GiveAbilityForSkillFragment()
 {
 	if (HasAuthority() && AbilitySystemComponent)
 	{
-		AbilitySystemComponent->GiveAbility(
-			FGameplayAbilitySpec(QSkillFragment, GetCharacterLevel(), static_cast<int32>(QSkillFragment.GetDefaultObject()->AbilityInputID), this));
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(QSkillFragment, GetCharacterLevel(), static_cast<int32>(QSkillFragment.GetDefaultObject()->AbilityInputID), this));	
 	}
 }
 
