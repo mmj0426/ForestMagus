@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, meta = (ShowWorldContextPin))
 class FORESTMAGUS_API UFMTargetType : public UObject
 {
 	GENERATED_BODY()
