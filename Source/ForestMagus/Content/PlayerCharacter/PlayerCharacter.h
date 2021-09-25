@@ -61,4 +61,5 @@ private :
 
 	void Q_Pressed();
 	void GiveAbilityForSkillFragment();
+
 };
