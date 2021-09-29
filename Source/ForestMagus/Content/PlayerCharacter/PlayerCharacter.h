@@ -54,6 +54,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HiddenRangeDecal();
 
+	// Meteor Test
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UFMGameplayAbility>QSkillFragment;
+
+
+
 private : 
 	// 마우스 커서 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -61,5 +67,8 @@ private :
 
 	void Q_Pressed();
 	void GiveAbilityForSkillFragment();
+
+
+
 
 };

@@ -46,10 +46,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	TArray<TSubclassOf<class UFMGameplayAbility>> DefaultAbilities;
 
-	// Meteor Test
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	TSubclassOf<UFMGameplayAbility>QSkillFragment;
-
 	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ABaseCharacter* InstigatorCharacter, AActor* DamageCauser);
 	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 	virtual void HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
