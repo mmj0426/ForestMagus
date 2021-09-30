@@ -12,6 +12,10 @@ enum class EFMAbilityInputID : uint8
 	Cancel,
 	FireBall,
 	IceBall,
-	UseSkill
+	UseSkill,
+	Q,
+	E,
+	R,
+	F
 	//QSkill
 };

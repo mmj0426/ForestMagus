@@ -8,6 +8,8 @@
 #include "Structs/Abilities/FMAbilityInputIDEnum.h"
 #include "Structs/Abilities/FMAbilityTypes.h"
 
+#include "Structs/Enum/FMAbilityTypeEnum.h"
+
 #include "FMGameplayAbility.generated.h"
 
 
@@ -22,6 +24,10 @@ public :
 	UPROPERTY(BlueprintReadOnly,EditAnywhere, Category = "Ability")
 	EFMAbilityInputID AbilityInputID = EFMAbilityInputID::None;
 	
+	/* Ability Type */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Ability)
+	EFMAbilityType AbilityType = EFMAbilityType::None;
+
 	/** 태그를 Key로하는 Effect 컨테이너 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GameplayEffects)
 	TMap<FGameplayTag, FFMGameplayEffectContainer> EffectContainerMap;

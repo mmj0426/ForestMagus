@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ForestMagus.h"
+#include "Structs/Abilities/FMAbilityInputIDEnum.h"
 #include "Structs/Character/BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
@@ -49,16 +50,14 @@ public:
 	bool bCanShowCursorDecal;
 
 	UFUNCTION(BlueprintCallable)
-	void EndRangeSkill();
+	void ShowDecal(bool CanShow);
 
 	UFUNCTION(BlueprintCallable)
-	void HiddenRangeDecal();
+	void EndRangeSkill();
 
-	// Meteor Test
+	// 스킬파편 획득 후 저장할 컨테이너
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<UFMGameplayAbility>QSkillFragment;
-
-
+	TMap<EFMAbilityInputID, TSubclassOf<UFMGameplayAbility>> FragmentAbilities;
 
 private : 
 	// 마우스 커서 데칼
@@ -66,7 +65,9 @@ private :
 	class UDecalComponent* RangeDecal;
 
 	void Q_Pressed();
-	void GiveAbilityForSkillFragment();
+	void UseSkill_Pressed();
+
+	EFMAbilityInputID CastingID;
 
 
 

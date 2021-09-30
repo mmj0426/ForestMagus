@@ -10,6 +10,8 @@
 #include "Structs/Abilities/FMAbilitySystemComponent.h"
 #include "Structs/Abilities/FMGameplayAbility.h"
 
+#include "Structs/Enum/FMAbilityTypeEnum.h"
+
 #include "AbilitySystemComponent.h"
 #include "Components/DecalComponent.h"
 #include "Camera/CameraComponent.h"
@@ -100,6 +102,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	InputComponent->BindAction(TEXT("QSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Q_Pressed);
+	InputComponent->BindAction(TEXT("UseSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::UseSkill_Pressed);
 }
 
 void APlayerCharacter::EndRangeSkill()
@@ -113,35 +116,56 @@ void APlayerCharacter::EndRangeSkill()
 
 }
 
-void APlayerCharacter::HiddenRangeDecal()
-{
-	bCanShowCursorDecal = false;
-	GetRangeDecal()->SetHiddenInGame(true);
-}
-
 void APlayerCharacter::Q_Pressed()
 {
-	if (nullptr != QSkillFragment)
+
+	if (nullptr == FragmentAbilities[EFMAbilityInputID::Q])
 	{
-		// 프로젝타일형, 범위형 나누기
-
-		bCanShowCursorDecal = true;
-		GetRangeDecal()->SetHiddenInGame(false);
-
-		GiveAbilityForSkillFragment();
+		return;
 	}
-	else
+
+	// 발사형일 경우
+	if (FragmentAbilities[EFMAbilityInputID::Q].GetDefaultObject()->AbilityType == EFMAbilityType::Firing)
 	{
-		FMLOG(Warning, TEXT("Q Skill Fragment is nullptr"));
+		// Give Ability and Active Once
+		if (HasAuthority() && AbilitySystemComponent)
+		{
+			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[EFMAbilityInputID::Q], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[EFMAbilityInputID::Q].GetDefaultObject()->AbilityInputID), this);
+			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
+		}
+
+		FragmentAbilities[EFMAbilityInputID::Q] = nullptr;
+		return;
+	}
+	// 범위형일 경우
+	else if (FragmentAbilities[EFMAbilityInputID::Q].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
+	{
+		ShowDecal(true);
+		
+		CastingID = EFMAbilityInputID::Q;
 	}
 }
 
-void APlayerCharacter::GiveAbilityForSkillFragment()
+void APlayerCharacter::UseSkill_Pressed()
 {
-	if (HasAuthority() && AbilitySystemComponent)
+	if (CastingID != EFMAbilityInputID::None)
 	{
-		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(QSkillFragment, GetCharacterLevel(), static_cast<int32>(QSkillFragment.GetDefaultObject()->AbilityInputID), this));	
+		// Give Ability and Active Once
+		if (HasAuthority() && AbilitySystemComponent)
+		{
+			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[EFMAbilityInputID::Q], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[EFMAbilityInputID::Q].GetDefaultObject()->AbilityInputID), this);
+			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
+		}
+
+		FragmentAbilities[CastingID] = nullptr;
+		CastingID = EFMAbilityInputID::None;
 	}
+}
+
+void APlayerCharacter::ShowDecal(bool CanShow)
+{
+	bCanShowCursorDecal = CanShow;
+	GetRangeDecal()->SetHiddenInGame(!CanShow);
 }
 
 void APlayerCharacter::PostInitializeComponents()
