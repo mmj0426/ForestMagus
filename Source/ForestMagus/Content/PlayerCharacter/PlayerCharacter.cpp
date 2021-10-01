@@ -103,6 +103,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	InputComponent->BindAction(TEXT("QSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Q_Pressed);
 	InputComponent->BindAction(TEXT("UseSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::UseSkill_Pressed);
+	InputComponent->BindAction(TEXT("BasicAttack"), EInputEvent::IE_Pressed, this, &APlayerCharacter::BasicAttack);
 }
 
 void APlayerCharacter::EndRangeSkill()
@@ -160,6 +161,27 @@ void APlayerCharacter::UseSkill_Pressed()
 		FragmentAbilities[CastingID] = nullptr;
 		CastingID = EFMAbilityInputID::None;
 	}
+}
+
+void APlayerCharacter::BasicAttack()
+{
+	if (CastingID != EFMAbilityInputID::None)
+	{
+		// Cancel range attack
+		ShowDecal(false);
+		CastingID = EFMAbilityInputID::None;
+
+		FMLOG(Warning, TEXT("Cancel the RangeSkill"));
+
+	}
+	
+	// And play basic attack 
+	if (HasAuthority() && AbilitySystemComponent)
+	{
+		auto AbilitySpec = FGameplayAbilitySpec(BasicAttackAbility, GetCharacterLevel(), static_cast<int32>(BasicAttackAbility.GetDefaultObject()->AbilityInputID), this);
+		AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
+	}
+
 }
 
 void APlayerCharacter::ShowDecal(bool CanShow)

@@ -55,6 +55,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndRangeSkill();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UFMGameplayAbility> BasicAttackAbility;
+
 	// 스킬파편 획득 후 저장할 컨테이너
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TMap<EFMAbilityInputID, TSubclassOf<UFMGameplayAbility>> FragmentAbilities;
@@ -66,6 +69,7 @@ private :
 
 	void Q_Pressed();
 	void UseSkill_Pressed();
+	void BasicAttack();
 
 	EFMAbilityInputID CastingID;
 
