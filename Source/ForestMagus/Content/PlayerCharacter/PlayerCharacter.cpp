@@ -100,8 +100,12 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	InputComponent->BindAction(TEXT("QSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::OnSkillKeyPressed);
+	InputComponent->BindAction(TEXT("ESkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::OnSkillKeyPressed);
+	InputComponent->BindAction(TEXT("RSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::OnSkillKeyPressed);
+	InputComponent->BindAction(TEXT("FSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::OnSkillKeyPressed);
 
-	InputComponent->BindAction(TEXT("QSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Q_Pressed);
 	InputComponent->BindAction(TEXT("UseSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::UseSkill_Pressed);
 	InputComponent->BindAction(TEXT("BasicAttack"), EInputEvent::IE_Pressed, this, &APlayerCharacter::BasicAttack);
 }
@@ -117,7 +121,7 @@ void APlayerCharacter::EndRangeSkill()
 
 }
 
-void APlayerCharacter::Q_Pressed()
+void APlayerCharacter::OnSkillKeyPressed()
 {
 
 	if (nullptr == FragmentAbilities[EFMAbilityInputID::Q])
@@ -182,6 +186,11 @@ void APlayerCharacter::BasicAttack()
 		AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
 	}
 
+}
+
+void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillInfo)
+{
+	
 }
 
 void APlayerCharacter::ShowDecal(bool CanShow)

@@ -7,6 +7,8 @@
 #include "Structs/Character/BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
+DECLARE_DELEGATE_OneParam(FCustomInputDelegate, EFMAbilityInputID InputKey);
+
 UCLASS()
 class FORESTMAGUS_API APlayerCharacter : public ABaseCharacter
 {
@@ -67,12 +69,13 @@ private :
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDecalComponent* RangeDecal;
 
-	void Q_Pressed();
+	void OnSkillKeyPressed();
 	void UseSkill_Pressed();
 	void BasicAttack();
 
 	EFMAbilityInputID CastingID;
 
+	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillInfo);
 
 
 
