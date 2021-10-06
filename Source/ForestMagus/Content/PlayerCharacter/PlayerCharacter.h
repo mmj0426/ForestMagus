@@ -64,6 +64,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TMap<EFMAbilityInputID, TSubclassOf<UFMGameplayAbility>> FragmentAbilities;
 
+	// 스킬파편 획득 후 스킬 등록
+	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility);
+
 private : 
 	// 마우스 커서 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -75,7 +78,6 @@ private :
 
 	EFMAbilityInputID CastingID;
 
-	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillInfo);
 
 
 

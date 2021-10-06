@@ -188,9 +188,12 @@ void APlayerCharacter::BasicAttack()
 
 }
 
-void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillInfo)
+void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility)
 {
-	
+	if (FragmentAbilities[EFMAbilityInputID::Q] == nullptr)
+	{
+		FragmentAbilities[EFMAbilityInputID::Q] = SkillAbility;
+	}
 }
 
 void APlayerCharacter::ShowDecal(bool CanShow)

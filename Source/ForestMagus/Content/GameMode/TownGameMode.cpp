@@ -16,7 +16,7 @@ ATownGameMode::ATownGameMode()
 	PlayerControllerClass = APlayerCharacterController::StaticClass();
 
 	static ConstructorHelpers::FClassFinder<AHUD>
-	HUD_Default(TEXT("/Game/Characters/HUD/HUD_Crosshair.HUD_Crosshair_C"));
+	HUD_Default(TEXT("/Game/Blueprint/HUD/HUD_Crosshair.HUD_Crosshair_C"));
 
 	HUDClass = HUD_Default.Class;
 }

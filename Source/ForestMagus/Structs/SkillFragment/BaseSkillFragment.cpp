@@ -15,15 +15,18 @@ ABaseSkillFragment::ABaseSkillFragment()
 	SphereCollision->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 	RootComponent = SphereCollision;
 
-	SphereMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SphereMesh"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>
-	SM_Sphere(TEXT("/Game/Blueprint/SkillFragment/SM_Fragment.SM_Fragment"));
-	if (SM_Sphere.Succeeded())
-	{
-		SphereMesh->SetStaticMesh(SM_Sphere.Object);
-		SphereMesh->SetupAttachment(RootComponent);
-		SphereMesh->SetCollisionProfileName(TEXT("NoCollision"));
-	}
+	SkillFragmentMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SkillFragmentMesh"));
+
+	SkillFragmentMesh->SetupAttachment(RootComponent);
+	SkillFragmentMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh>
+	//SM_Sphere(TEXT("/Game/Blueprint/SkillFragment/SM_Fragment.SM_Fragment"));
+	//if (SM_Sphere.Succeeded())
+	//{
+	//	SkillFragmentMesh->SetStaticMesh(SM_Sphere.Object);
+
+	//}
 
 }
 
@@ -46,7 +49,7 @@ void ABaseSkillFragment::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAc
 	auto PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	if (nullptr != PlayerCharacter)
 	{
-		// Player -> SetAbility
+		PlayerCharacter->SetAbility(SkillAbility);
 		Destroy();
 	}
 }
