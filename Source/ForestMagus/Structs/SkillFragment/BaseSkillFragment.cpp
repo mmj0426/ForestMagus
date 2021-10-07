@@ -49,8 +49,11 @@ void ABaseSkillFragment::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAc
 	auto PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	if (nullptr != PlayerCharacter)
 	{
-		PlayerCharacter->SetAbility(SkillAbility);
-		Destroy();
+		if (PlayerCharacter->CanGetSkillFragment())
+		{
+			PlayerCharacter->SetAbility(SkillAbility);
+			Destroy();
+		}
 	}
 }
 

@@ -67,6 +67,8 @@ public:
 	// 스킬파편 획득 후 스킬 등록
 	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility);
 
+	bool CanGetSkillFragment();
+
 private : 
 	// 마우스 커서 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -76,6 +78,9 @@ private :
 	void UseSkill_Pressed();
 	void BasicAttack();
 
+	void TryAction(FKey key);
+
+	EFMAbilityInputID InputKey;
 	EFMAbilityInputID CastingID;
 
 

@@ -101,10 +101,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
-	InputComponent->BindAction(TEXT("QSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::OnSkillKeyPressed);
-	InputComponent->BindAction(TEXT("ESkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::OnSkillKeyPressed);
-	InputComponent->BindAction(TEXT("RSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::OnSkillKeyPressed);
-	InputComponent->BindAction(TEXT("FSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::OnSkillKeyPressed);
+	InputComponent->BindAction(TEXT("FragmentSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::TryAction);
 
 	InputComponent->BindAction(TEXT("UseSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::UseSkill_Pressed);
 	InputComponent->BindAction(TEXT("BasicAttack"), EInputEvent::IE_Pressed, this, &APlayerCharacter::BasicAttack);
@@ -116,38 +113,36 @@ void APlayerCharacter::EndRangeSkill()
 	//auto ActivatableSkillArray = AbilitySystemComponent->GetActivatableAbilities();
 	//AbilitySystemComponent->ClearAbility(ActivatableSkillArray[1].Handle);
 
-	
 	FMLOG(Warning, TEXT("EndRangeSkill"));
 
 }
 
 void APlayerCharacter::OnSkillKeyPressed()
 {
-
-	if (nullptr == FragmentAbilities[EFMAbilityInputID::Q])
+	if (nullptr == FragmentAbilities[InputKey])
 	{
 		return;
 	}
 
 	// 발사형일 경우
-	if (FragmentAbilities[EFMAbilityInputID::Q].GetDefaultObject()->AbilityType == EFMAbilityType::Firing)
+	if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Firing)
 	{
 		// Give Ability and Active Once
 		if (HasAuthority() && AbilitySystemComponent)
 		{
-			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[EFMAbilityInputID::Q], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[EFMAbilityInputID::Q].GetDefaultObject()->AbilityInputID), this);
+			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[InputKey], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[InputKey].GetDefaultObject()->AbilityInputID), this);
 			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
 		}
 
-		FragmentAbilities[EFMAbilityInputID::Q] = nullptr;
+		FragmentAbilities[InputKey] = nullptr;
 		return;
 	}
 	// 범위형일 경우
-	else if (FragmentAbilities[EFMAbilityInputID::Q].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
+	else if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
 	{
 		ShowDecal(true);
 		
-		CastingID = EFMAbilityInputID::Q;
+		CastingID = InputKey;
 	}
 }
 
@@ -158,7 +153,7 @@ void APlayerCharacter::UseSkill_Pressed()
 		// Give Ability and Active Once
 		if (HasAuthority() && AbilitySystemComponent)
 		{
-			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[EFMAbilityInputID::Q], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[EFMAbilityInputID::Q].GetDefaultObject()->AbilityInputID), this);
+			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[InputKey], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[InputKey].GetDefaultObject()->AbilityInputID), this);
 			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
 		}
 
@@ -188,12 +183,56 @@ void APlayerCharacter::BasicAttack()
 
 }
 
+void APlayerCharacter::TryAction(FKey key)
+{
+	FName KeyName = key.GetFName();
+
+	if (KeyName.ToString() == TEXT("Q"))
+	{
+		InputKey = EFMAbilityInputID::Q;
+	}
+	else if (KeyName.ToString() == TEXT("E"))
+	{
+		InputKey = EFMAbilityInputID::E;
+	}
+	else if (KeyName.ToString() == TEXT("R"))
+	{
+		InputKey = EFMAbilityInputID::R;
+	}
+	
+	OnSkillKeyPressed();
+}
+
 void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility)
 {
 	if (FragmentAbilities[EFMAbilityInputID::Q] == nullptr)
 	{
 		FragmentAbilities[EFMAbilityInputID::Q] = SkillAbility;
+		return;
 	}
+	else if (FragmentAbilities[EFMAbilityInputID::E] == nullptr)
+	{
+		FragmentAbilities[EFMAbilityInputID::E] = SkillAbility;
+		return;
+	}
+	else if (FragmentAbilities[EFMAbilityInputID::R] == nullptr)
+	{
+		FragmentAbilities[EFMAbilityInputID::R] = SkillAbility;
+		return;
+	}
+}
+
+bool APlayerCharacter::CanGetSkillFragment()
+{
+	for (auto it = FragmentAbilities.CreateConstIterator(); it; ++it)
+	{
+		if (*it.Value() == nullptr)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void APlayerCharacter::ShowDecal(bool CanShow)
@@ -213,6 +252,10 @@ void APlayerCharacter::PostInitializeComponents()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FragmentAbilities.Emplace(EFMAbilityInputID::Q,nullptr);
+	FragmentAbilities.Emplace(EFMAbilityInputID::E, nullptr);
+	FragmentAbilities.Emplace(EFMAbilityInputID::R, nullptr);
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
