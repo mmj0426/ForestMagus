@@ -65,7 +65,7 @@ public:
 	TMap<EFMAbilityInputID, TSubclassOf<UFMGameplayAbility>> FragmentAbilities;
 
 	// 스킬파편 획득 후 스킬 등록
-	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility);
+	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon);
 
 	bool CanGetSkillFragment();
 
@@ -78,7 +78,7 @@ private :
 	void UseSkill_Pressed();
 	void BasicAttack();
 
-	void TryAction(FKey key);
+	void SeparateSkillKey(FKey key);
 
 	EFMAbilityInputID InputKey;
 	EFMAbilityInputID CastingID;

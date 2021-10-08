@@ -3,17 +3,23 @@
 #include "Content/PlayerCharacter/PlayerCharacter.h"
 #include "Content/PlayerCharacter/PlayerCharacterAnimInstance.h"
 
+#include "Content/HUD/GameHUD.h"
+#include "Content/UMG/SkillFragmentWidget.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PlayerController.h"
 
 #include "Structs/Abilities/FMAbilitySystemComponent.h"
 #include "Structs/Abilities/FMGameplayAbility.h"
-
 #include "Structs/Enum/FMAbilityTypeEnum.h"
 
 #include "AbilitySystemComponent.h"
+
 #include "Components/DecalComponent.h"
+
+#include "Kismet/GameplayStatics.h"
+
 #include "Camera/CameraComponent.h"
 
 #include "Materials/Material.h"
@@ -101,7 +107,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
-	InputComponent->BindAction(TEXT("FragmentSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::TryAction);
+	InputComponent->BindAction(TEXT("FragmentSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SeparateSkillKey);
 
 	InputComponent->BindAction(TEXT("UseSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::UseSkill_Pressed);
 	InputComponent->BindAction(TEXT("BasicAttack"), EInputEvent::IE_Pressed, this, &APlayerCharacter::BasicAttack);
@@ -134,7 +140,12 @@ void APlayerCharacter::OnSkillKeyPressed()
 			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
 		}
 
+		// UI를 비어있는(Default) 이미지로 바꿔줌
+		auto SkillFragmentWidget = Cast<AGameHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD())->GetSkillFragmentWidget();
+		SkillFragmentWidget->SetIconToDefault(InputKey);
+
 		FragmentAbilities[InputKey] = nullptr;
+
 		return;
 	}
 	// 범위형일 경우
@@ -158,6 +169,11 @@ void APlayerCharacter::UseSkill_Pressed()
 		}
 
 		FragmentAbilities[CastingID] = nullptr;
+
+		// UI를 비어있는(Default) 이미지로 바꿔줌
+		auto SkillFragmentWidget = Cast<AGameHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD())->GetSkillFragmentWidget();
+		SkillFragmentWidget->SetIconToDefault(InputKey);
+
 		CastingID = EFMAbilityInputID::None;
 	}
 }
@@ -183,8 +199,9 @@ void APlayerCharacter::BasicAttack()
 
 }
 
-void APlayerCharacter::TryAction(FKey key)
+void APlayerCharacter::SeparateSkillKey(FKey key)
 {
+	// 키 입력 분리
 	FName KeyName = key.GetFName();
 
 	if (KeyName.ToString() == TEXT("Q"))
@@ -199,27 +216,34 @@ void APlayerCharacter::TryAction(FKey key)
 	{
 		InputKey = EFMAbilityInputID::R;
 	}
-	
+
 	OnSkillKeyPressed();
 }
 
-void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility)
+void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon)
 {
+	EFMAbilityInputID SkillSlot;
+	
+	// 스킬 슬롯이 비어있는 상태면 Q > E > R 순으로 채운다.
 	if (FragmentAbilities[EFMAbilityInputID::Q] == nullptr)
 	{
 		FragmentAbilities[EFMAbilityInputID::Q] = SkillAbility;
-		return;
+		SkillSlot = EFMAbilityInputID::Q;
 	}
 	else if (FragmentAbilities[EFMAbilityInputID::E] == nullptr)
 	{
 		FragmentAbilities[EFMAbilityInputID::E] = SkillAbility;
-		return;
+		SkillSlot = EFMAbilityInputID::E;
 	}
 	else if (FragmentAbilities[EFMAbilityInputID::R] == nullptr)
 	{
 		FragmentAbilities[EFMAbilityInputID::R] = SkillAbility;
-		return;
+		SkillSlot = EFMAbilityInputID::R;
 	}
+
+	// 해당 키에 해당하는 스킬 슬롯 UI에 스킬 아이콘을 적용시켜줌
+	auto SkillFragmentWidget = Cast<AGameHUD>(UGameplayStatics::GetPlayerController(GetWorld(),0)->GetHUD())->GetSkillFragmentWidget();
+	SkillFragmentWidget->SetSkill_Icon(SkillSlot,SkillIcon);
 }
 
 bool APlayerCharacter::CanGetSkillFragment()
