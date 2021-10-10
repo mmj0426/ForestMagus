@@ -20,14 +20,6 @@ ABaseSkillFragment::ABaseSkillFragment()
 	SkillFragmentMesh->SetupAttachment(RootComponent);
 	SkillFragmentMesh->SetCollisionProfileName(TEXT("NoCollision"));
 
-	//static ConstructorHelpers::FObjectFinder<UStaticMesh>
-	//SM_Sphere(TEXT("/Game/Blueprint/SkillFragment/SM_Fragment.SM_Fragment"));
-	//if (SM_Sphere.Succeeded())
-	//{
-	//	SkillFragmentMesh->SetStaticMesh(SM_Sphere.Object);
-
-	//}
-
 }
 
 void ABaseSkillFragment::BeginPlay()
