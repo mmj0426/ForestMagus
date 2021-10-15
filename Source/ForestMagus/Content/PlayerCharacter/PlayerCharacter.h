@@ -88,6 +88,9 @@ public :
 
 	bool CanMove() const;
 
+	UFUNCTION(BlueprintCallable)
+	bool CanTeleportation() const;
+
 private : 
 	// 마우스 커서 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

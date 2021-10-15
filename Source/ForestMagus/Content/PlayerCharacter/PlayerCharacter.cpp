@@ -318,6 +318,11 @@ bool APlayerCharacter::CanMove() const
 			&& (CurrentState != EFMPlayerState::Attacking)) ;
 }
 
+bool APlayerCharacter::CanTeleportation() const
+{
+	return (CurrentState != EFMPlayerState::Attacking);
+}
+
 void APlayerCharacter::ShowDecal(bool CanShow)
 {
 	bCanShowCursorDecal = CanShow;
