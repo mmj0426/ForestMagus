@@ -1,4 +1,7 @@
 // copyright @민지
+// 
+// edit 2021-10-15 @Winter
+// BP에 있는 Tick 로직 CPP로 변경 (성능 차이의 이유로 변경)
 
 #include "Content/PlayerCharacter/PlayerCharacter.h"
 #include "Content/PlayerCharacter/PlayerCharacterAnimInstance.h"
@@ -23,6 +26,7 @@
 #include "Camera/CameraComponent.h"
 
 #include "Materials/Material.h"
+#include <Kismet/KismetMathLibrary.h>
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -121,6 +125,35 @@ void APlayerCharacter::EndRangeSkill()
 
 	FMLOG(Warning, TEXT("EndRangeSkill"));
 
+}
+
+bool APlayerCharacter::GetCrosshairHitResult(FHitResult& Result)
+{
+	FVector CameraLocation = Camera->GetComponentLocation();
+	FRotator CameraRotation = Camera->GetComponentRotation();
+
+	FVector Forward = UKismetMathLibrary::GetForwardVector(CameraRotation) * 5000.f;
+
+	FHitResult HitResult;
+
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(this);
+
+	EDrawDebugTrace::Type Debug = EDrawDebugTrace::None;
+	if (bCrosshairDebug)
+	{
+		Debug = EDrawDebugTrace::ForDuration;
+	}
+
+	bool bResult = UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), CameraLocation, Forward + CameraLocation, CrosshairObjectTypes,
+		true, ActorsToIgnore, Debug, HitResult, true);
+
+	if(bResult)
+	{
+		Result = HitResult;
+	}
+
+	return bResult;
 }
 
 void APlayerCharacter::OnSkillKeyPressed()
@@ -259,6 +292,24 @@ bool APlayerCharacter::CanGetSkillFragment()
 	return false;
 }
 
+void APlayerCharacter::DrawRangeDecal()
+{
+	if(false == bCanShowCursorDecal)
+	{ 
+		return;
+	}
+
+	FHitResult HitResult;
+	bool bResult = GetCrosshairHitResult(HitResult);
+
+	if (bResult)
+	{
+		FVector ImpactNormal = HitResult.ImpactNormal;
+
+		RangeDecal->SetWorldLocationAndRotation(HitResult.Location, ImpactNormal.ToOrientationQuat());
+	}
+}
+
 void APlayerCharacter::ShowDecal(bool CanShow)
 {
 	bCanShowCursorDecal = CanShow;
@@ -285,6 +336,9 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	DrawRangeDecal();
+
 
 	//if (RangeDecal != nullptr && bCanShowCursorDecal)
 	//{

@@ -1,4 +1,8 @@
 // copyright @민지
+// 
+// edit 2021-10-15 @Winter
+// DrawRangeDecal 함수 추가
+// GetCorsshairHitResult 추가
 
 #pragma once
 
@@ -15,7 +19,6 @@ class FORESTMAGUS_API APlayerCharacter : public ABaseCharacter
 	GENERATED_BODY()
 
 public:
-	
 	APlayerCharacter();
 
 	FORCEINLINE class UDecalComponent* GetRangeDecal() { return RangeDecal; }
@@ -57,6 +60,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndRangeSkill();
 
+	UFUNCTION(BlueprintCallable)
+	bool GetCrosshairHitResult(FHitResult& Result);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<UFMGameplayAbility> BasicAttackAbility;
 
@@ -69,10 +75,18 @@ public:
 
 	bool CanGetSkillFragment();
 
+	void DrawRangeDecal();
+
 private : 
 	// 마우스 커서 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDecalComponent* RangeDecal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings/Crosshair", meta = (AllowPrivateAccess = "true"))
+	TArray<TEnumAsByte<EObjectTypeQuery>> CrosshairObjectTypes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings/Crosshair", meta = (AllowPrivateAccess = "true"))
+	bool bCrosshairDebug;
 
 	void OnSkillKeyPressed();
 	void UseSkill_Pressed();
@@ -82,8 +96,4 @@ private :
 
 	EFMAbilityInputID InputKey;
 	EFMAbilityInputID CastingID;
-
-
-
-
 };
