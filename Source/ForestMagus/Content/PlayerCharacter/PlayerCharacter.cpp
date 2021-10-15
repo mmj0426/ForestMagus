@@ -100,6 +100,8 @@ APlayerCharacter::APlayerCharacter()
 	{
 		StaffMesh->SetStaticMesh(SM_StaffWeapon.Object);
 	}
+
+	CurrentState = EFMPlayerState::None;
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)
@@ -308,6 +310,12 @@ void APlayerCharacter::DrawRangeDecal()
 
 		RangeDecal->SetWorldLocationAndRotation(HitResult.Location, ImpactNormal.ToOrientationQuat());
 	}
+}
+
+bool APlayerCharacter::CanMove() const
+{
+	return ((CurrentState != EFMPlayerState::Teleportation)
+			&& (CurrentState != EFMPlayerState::Attacking)) ;
 }
 
 void APlayerCharacter::ShowDecal(bool CanShow)

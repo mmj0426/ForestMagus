@@ -36,7 +36,7 @@ void APlayerCharacterController::SetupInputComponent()
 void APlayerCharacterController::MoveForward(float NewAxisValue)
 {
 	MoveValue.X = NewAxisValue;
-	if (FMPlayer && NewAxisValue != 0.f)
+	if (FMPlayer && NewAxisValue != 0.f && FMPlayer->CanMove())
 	{
 		FMPlayer->AddMovementInput(FRotationMatrix(FRotator(0.f, GetControlRotation().Yaw, 0.f)).GetUnitAxis(EAxis::X), NewAxisValue);
 	}
@@ -45,7 +45,7 @@ void APlayerCharacterController::MoveForward(float NewAxisValue)
 void APlayerCharacterController::MoveRight(float NewAxisValue)
 {
 	MoveValue.Y = NewAxisValue;
-	if (FMPlayer && NewAxisValue != 0.f)
+	if (FMPlayer && NewAxisValue != 0.f && FMPlayer->CanMove())
 	{
 		FMPlayer->AddMovementInput(FRotationMatrix(FRotator(0.f, GetControlRotation().Yaw, 0.f)).GetUnitAxis(EAxis::Y), NewAxisValue);
 	}

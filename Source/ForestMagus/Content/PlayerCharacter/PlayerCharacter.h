@@ -9,6 +9,7 @@
 #include "ForestMagus.h"
 #include "Structs/Abilities/FMAbilityInputIDEnum.h"
 #include "Structs/Character/BaseCharacter.h"
+#include "Structs/Enum/EFMPlayerState.h"
 #include "PlayerCharacter.generated.h"
 
 DECLARE_DELEGATE_OneParam(FCustomInputDelegate, EFMAbilityInputID InputKey);
@@ -51,18 +52,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent,Category = Teleportation)
 	void Teleportation();
 
+	// 범위형 스킬 관련 데칼
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanShowCursorDecal;
 
-	UFUNCTION(BlueprintCallable)
-	void ShowDecal(bool CanShow);
-
-	UFUNCTION(BlueprintCallable)
-	void EndRangeSkill();
-
-	UFUNCTION(BlueprintCallable)
-	bool GetCrosshairHitResult(FHitResult& Result);
-
+	// 기본 공격 어빌리티
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<UFMGameplayAbility> BasicAttackAbility;
 
@@ -70,12 +64,29 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TMap<EFMAbilityInputID, TSubclassOf<UFMGameplayAbility>> FragmentAbilities;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EFMPlayerState CurrentState;
+
+public : 
+
+	// 범위형 스킬 
+	UFUNCTION(BlueprintCallable)
+	void ShowDecal(bool CanShow);
+
+	UFUNCTION(BlueprintCallable)
+	void EndRangeSkill();
+
+	// Crosshair 레이
+	UFUNCTION(BlueprintCallable)
+	bool GetCrosshairHitResult(FHitResult& Result);
 	// 스킬파편 획득 후 스킬 등록
 	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon);
 
 	bool CanGetSkillFragment();
 
 	void DrawRangeDecal();
+
+	bool CanMove() const;
 
 private : 
 	// 마우스 커서 데칼
@@ -88,12 +99,15 @@ private :
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings/Crosshair", meta = (AllowPrivateAccess = "true"))
 	bool bCrosshairDebug;
 
+	EFMAbilityInputID InputKey;
+	EFMAbilityInputID CastingID;
+
+private : 
+
 	void OnSkillKeyPressed();
 	void UseSkill_Pressed();
 	void BasicAttack();
 
 	void SeparateSkillKey(FKey key);
 
-	EFMAbilityInputID InputKey;
-	EFMAbilityInputID CastingID;
 };
