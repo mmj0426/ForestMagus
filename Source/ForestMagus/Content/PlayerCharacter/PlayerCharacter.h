@@ -76,15 +76,19 @@ public :
 	UFUNCTION(BlueprintCallable)
 	void EndRangeSkill();
 
+	void DrawRangeDecal();
+
 	// Crosshair 레이
 	UFUNCTION(BlueprintCallable)
 	bool GetCrosshairHitResult(FHitResult& Result);
+
 	// 스킬파편 획득 후 스킬 등록
 	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon);
 
-	bool CanGetSkillFragment();
+public : 
 
-	void DrawRangeDecal();
+	// 행동 조건 (제약)
+	bool CanGetSkillFragment();
 
 	bool CanMove() const;
 
