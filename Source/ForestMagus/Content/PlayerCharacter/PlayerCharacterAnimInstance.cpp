@@ -20,10 +20,10 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
-void UPlayerCharacterAnimInstance::PlayAnimMontage(FString MontageName)
-{
-	if (!Montage_IsPlaying(MontageMap[MontageName]))
-	{
-		Montage_Play(MontageMap[MontageName],1.f);
-	}
-}
+//void UPlayerCharacterAnimInstance::PlayAnimMontage(FString MontageName)
+//{
+//	if (!Montage_IsPlaying(MontageMap[MontageName]))
+//	{
+//		Montage_Play(MontageMap[MontageName], 1.f);
+//	}
+//}

@@ -45,8 +45,8 @@ public:
 	class UStaticMeshComponent* StaffMesh;
 
 	// 애니메이션
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UPlayerCharacterAnimInstance* PlayerAnim;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	//class UPlayerCharacterAnimInstance* PlayerAnim;
 
 	// 텔레포트 - 블루프린트 함수 정의
 	UFUNCTION(BlueprintImplementableEvent,Category = Teleportation)

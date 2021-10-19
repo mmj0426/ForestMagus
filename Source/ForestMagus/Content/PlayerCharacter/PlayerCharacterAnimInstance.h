@@ -17,7 +17,7 @@ public :
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	void PlayAnimMontage(FString MontageName);
+	//void PlayAnimMontage(FString MontageName);
 
 protected :
 	

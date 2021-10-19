@@ -333,8 +333,8 @@ void APlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	PlayerAnim = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-	FMCHECK(nullptr != PlayerAnim);
+	//PlayerAnim = Cast<UBaseCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	//FMCHECK(nullptr != PlayerAnim);
 }
 
 void APlayerCharacter::BeginPlay()
