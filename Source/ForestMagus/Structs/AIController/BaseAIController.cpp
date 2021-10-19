@@ -3,6 +3,10 @@
 
 #include "Structs/AIController/BaseAIController.h"
 
+#include "BehaviorTree/BlackboardComponent.h"
+
+const FName ABaseAIController::TargetKey(TEXT("Target"));
+
 ABaseAIController::ABaseAIController()
 {
 

@@ -20,6 +20,8 @@ public :
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnUnPossess()override;
 
+	static const FName TargetKey;
+
 protected : 
 	UPROPERTY()
 	class UBehaviorTree* BTAsset;
