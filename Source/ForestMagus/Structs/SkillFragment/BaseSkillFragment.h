@@ -29,9 +29,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class USphereComponent* SphereCollision;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UStaticMeshComponent* SkillFragmentMesh;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UFMGameplayAbility> SkillAbility;
 

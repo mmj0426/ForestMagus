@@ -14,12 +14,6 @@ ABaseSkillFragment::ABaseSkillFragment()
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
 	SphereCollision->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 	RootComponent = SphereCollision;
-
-	SkillFragmentMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SkillFragmentMesh"));
-
-	SkillFragmentMesh->SetupAttachment(RootComponent);
-	SkillFragmentMesh->SetCollisionProfileName(TEXT("NoCollision"));
-
 }
 
 void ABaseSkillFragment::BeginPlay()
