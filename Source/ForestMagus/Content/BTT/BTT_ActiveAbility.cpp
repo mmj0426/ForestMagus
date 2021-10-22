@@ -4,10 +4,12 @@
 #include "Content/BTT/BTT_ActiveAbility.h"
 
 #include "Structs/Character/BaseMonster.h"
+#include "Content/PlayerCharacter/PlayerCharacter.h"
 
 #include "Structs/AIController/BaseAIController.h"
 
 #include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 #include "Math/UnrealMathUtility.h"
 
@@ -27,6 +29,12 @@ EBTNodeResult::Type UBTT_ActiveAbility::ExecuteTask(UBehaviorTreeComponent& Owne
 	if (nullptr == ControllingMonster)
 	{
 		return EBTNodeResult::Failed;
+	}
+
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ABaseAIController::TargetKey));
+	if (nullptr == PlayerCharacter)
+	{
+		return::EBTNodeResult::Failed;
 	}
 
 	bIsAttacking = true;
@@ -54,9 +62,12 @@ EBTNodeResult::Type UBTT_ActiveAbility::ExecuteTask(UBehaviorTreeComponent& Owne
 		ControllingMonster->ActiveAbility(SkillAbility);
 	}
 
+	ControllingMonster->OnAbilityEnd.Clear();
+
 	// 몽타주가 끝나면 Ability End
 	ControllingMonster->OnAbilityEnd.AddLambda([this]()->void
 		{
+			FMLOG(Warning,TEXT("Montage Ended"));
 			bIsAttacking = false;
 		});
 

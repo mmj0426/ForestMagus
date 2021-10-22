@@ -35,5 +35,6 @@ void ABaseMonster::ActiveAbility(TSubclassOf<UFMGameplayAbility> SkillAbility)
 
 void ABaseMonster::MontageEnded(UAnimMontage* Montage, bool bInterrupeted)
 {
+	FMLOG(Warning, TEXT("BaseMonster"));
 	OnAbilityEnd.Broadcast();
 }
