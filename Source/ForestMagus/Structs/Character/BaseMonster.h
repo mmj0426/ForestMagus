@@ -21,7 +21,10 @@ public :
 public : 
 
 	// BTT에서 어빌리티 실행
+	UFUNCTION(BlueprintCallable)
 	void ActiveAbility(TSubclassOf<UFMGameplayAbility> SkillAbility);
+
+	void ActiveAbility(UFMGameplayAbility* SkillAbility);
 
 	// 애니메이션
 

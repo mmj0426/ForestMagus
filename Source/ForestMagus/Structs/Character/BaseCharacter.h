@@ -50,6 +50,9 @@ public:
 	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 	virtual void HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 
+	UFUNCTION(BlueprintCallable, Category = Abilities)
+	void GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<UFMGameplayAbility*>& ActiveAbilities);
+
 	UFUNCTION(BlueprintPure)
 	float GetHealth();
 

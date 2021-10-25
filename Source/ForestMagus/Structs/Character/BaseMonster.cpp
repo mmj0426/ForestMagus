@@ -33,6 +33,15 @@ void ABaseMonster::ActiveAbility(TSubclassOf<UFMGameplayAbility> SkillAbility)
 	}
 }
 
+void ABaseMonster::ActiveAbility(UFMGameplayAbility* SkillAbility)
+{
+	if (HasAuthority() && AbilitySystemComponent)
+	{
+		auto AbilitySpec = FGameplayAbilitySpec(SkillAbility, GetCharacterLevel(), static_cast<int32>(SkillAbility->AbilityInputID), this);
+		AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
+	}
+}
+
 void ABaseMonster::MontageEnded(UAnimMontage* Montage, bool bInterrupeted)
 {
 	FMLOG(Warning, TEXT("BaseMonster"));

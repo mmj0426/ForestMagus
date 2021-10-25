@@ -122,6 +122,11 @@ void ABaseCharacter::HandleManaChanged(float DeltaValue, const struct FGameplayT
 	OnManaChanged(DeltaValue, EventTags);
 }
 
+void ABaseCharacter::GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<UFMGameplayAbility*>& ActiveAbilities)
+{
+	AbilitySystemComponent->GetActiveAbilitiesWithTags(GameplayTagContainer, ActiveAbilities);
+}
+
 float ABaseCharacter::GetHealth()
 {
 	return Attributes->GetHealth();

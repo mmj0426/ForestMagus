@@ -12,7 +12,6 @@
 
 #include "FMGameplayAbility.generated.h"
 
-
 UCLASS()
 class FORESTMAGUS_API UFMGameplayAbility : public UGameplayAbility
 {
