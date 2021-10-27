@@ -236,22 +236,26 @@ void APlayerCharacter::BasicAttack()
 void APlayerCharacter::SeparateSkillKey(FKey key)
 {
 	// 키 입력 분리
-	FName KeyName = key.GetFName();
+	if(CastingID == EFMAbilityInputID::None)
+	{
+		FName KeyName = key.GetFName();
 
-	if (KeyName.ToString() == TEXT("Q"))
-	{
-		InputKey = EFMAbilityInputID::Q;
-	}
-	else if (KeyName.ToString() == TEXT("E"))
-	{
-		InputKey = EFMAbilityInputID::E;
-	}
-	else if (KeyName.ToString() == TEXT("R"))
-	{
-		InputKey = EFMAbilityInputID::R;
+		if (KeyName.ToString() == TEXT("Q"))
+		{
+			InputKey = EFMAbilityInputID::Q;
+		}
+		else if (KeyName.ToString() == TEXT("E"))
+		{
+			InputKey = EFMAbilityInputID::E;
+		}
+		else if (KeyName.ToString() == TEXT("R"))
+		{
+			InputKey = EFMAbilityInputID::R;
+		}
+
+		OnSkillKeyPressed();
 	}
 
-	OnSkillKeyPressed();
 }
 
 void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon)
