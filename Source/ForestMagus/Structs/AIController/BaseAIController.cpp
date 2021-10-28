@@ -15,6 +15,11 @@ ABaseAIController::ABaseAIController()
 void ABaseAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+
+	if ((UseBlackboard(BBAsset, Blackboard)) && (!RunBehaviorTree(BTAsset)))
+	{
+		FMLOG(Error, TEXT("AI Controller couldn't run behavior tree!"));
+	}
 }
 
 void ABaseAIController::OnUnPossess()

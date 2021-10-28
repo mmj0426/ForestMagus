@@ -23,10 +23,10 @@ public :
 	static const FName TargetKey;
 
 protected : 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior Tree")
 	class UBehaviorTree* BTAsset;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior Tree")
 	class UBlackboardData* BBAsset;
 
 };
