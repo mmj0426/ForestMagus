@@ -6,6 +6,7 @@
 #include "Content/PlayerCharacter/PlayerCharacter.h"
 
 #include "Content/HUD/GameHUD.h"
+
 #include "Content/UMG/SkillFragmentWidget.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
@@ -326,6 +327,14 @@ bool APlayerCharacter::CanTeleportation() const
 	return (CurrentState != EFMPlayerState::Attacking);
 }
 
+void APlayerCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagContainer& EventTags)
+{
+	auto PlayerController = Cast<APlayerController>(GetController());
+	auto Widget = Cast<AGameHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
+
+	Widget->SetPlayerHealth(FMath::Clamp<float>((GetHealth()/100),0.f,1.f));
+}
+
 void APlayerCharacter::ShowDecal(bool CanShow)
 {
 	bCanShowCursorDecal = CanShow;
@@ -343,6 +352,12 @@ void APlayerCharacter::PostInitializeComponents()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// HP Widget : PlayerHealth Percent -> 1
+	auto PlayerController = Cast<APlayerController>(GetController());
+	auto Widget = Cast<AGameHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
+
+	Widget->SetPlayerHealth(1.f);
 
 	FragmentAbilities.Emplace(EFMAbilityInputID::Q,nullptr);
 	FragmentAbilities.Emplace(EFMAbilityInputID::E, nullptr);

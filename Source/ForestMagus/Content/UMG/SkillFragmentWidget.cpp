@@ -1,8 +1,15 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// copyright @¹ÎÁö
 
 
 #include "Content/UMG/SkillFragmentWidget.h"
+#include "Content/PlayerCharacter/PlayerCharacterController.h"
 #include "Components/Image.h"
+#include "Components/ProgressBar.h"
+
+void USkillFragmentWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+}
 
 void USkillFragmentWidget::SetSkill_Icon(EFMAbilityInputID Inputkey, UTexture2D* Skill_Icon)
 {
@@ -54,4 +61,9 @@ void USkillFragmentWidget::SetIconToDefault(EFMAbilityInputID Inputkey)
 	default:
 		break;
 	}
+}
+
+void USkillFragmentWidget::SetPlayerHealth(float CurrentHealth)
+{
+	PlayerHealth = CurrentHealth;
 }

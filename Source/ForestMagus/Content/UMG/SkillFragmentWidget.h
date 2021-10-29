@@ -6,6 +6,8 @@
 #include "Structs/Abilities/FMAbilityInputIDEnum.h"
 #include "SkillFragmentWidget.generated.h"
 
+class APlayerCharacterController;
+
 /**
  * 
  */
@@ -30,10 +32,18 @@ protected :
 
 	UPROPERTY(BlueprintReadWrite)
 	class UTexture2D* DefaulIconTexture;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float PlayerHealth;
+
+protected : 
+	virtual void NativeConstruct() override;
 	
 public : 
 
 	void SetSkill_Icon(EFMAbilityInputID Inputkey, UTexture2D* Skill_Icon);
 
 	void SetIconToDefault(EFMAbilityInputID Inputkey);
+
+	void SetPlayerHealth(float CurrentHealth);
 };
