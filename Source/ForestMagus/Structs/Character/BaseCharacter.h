@@ -11,6 +11,8 @@
 class UFMAttributeSet;
 class UGameplayEffect;
 
+DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
+
 UCLASS()
 class FORESTMAGUS_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -54,10 +56,16 @@ public:
 	void GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<UFMGameplayAbility*>& ActiveAbilities);
 
 	UFUNCTION(BlueprintPure)
-	float GetHealth();
+	float GetCurrentHealth();
 
 	UFUNCTION(BlueprintPure)
 	float GetMaxHealth();
+
+	// Death Delegate
+	FOnHPIsZeroDelegate OnHPIsZero;
+
+	UFUNCTION(BlueprintCallable)
+	bool GetIsAlive() const;
 
 protected:
 	// 어빌리티 시스템
@@ -72,6 +80,7 @@ protected:
 	UPROPERTY()
 	class UFMAttributeSet* Attributes;
 
+	bool bIsAlive;
 
 	/** Event Functions */
 	UFUNCTION(BlueprintImplementableEvent)
@@ -82,4 +91,6 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
+
 };

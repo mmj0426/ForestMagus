@@ -50,5 +50,5 @@ void ABaseMonster::MontageEnded(UAnimMontage* Montage, bool bInterrupeted)
 
 float ABaseMonster::GetHP_Percent()
 {
-	return FMath::Clamp<float>(GetHealth()/GetMaxHealth(), 0.f,1.f);
+	return FMath::Clamp<float>(GetCurrentHealth()/GetMaxHealth(), 0.f,1.f);
 }

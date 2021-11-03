@@ -24,4 +24,7 @@ protected:
 	// 폰의 속도
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Pawn)
 	float CurrentPawnSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Death)
+	bool bIsAlive;
 };

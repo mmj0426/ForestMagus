@@ -9,6 +9,7 @@
 UBaseCharacterAnimInstance::UBaseCharacterAnimInstance()
 {
 	CurrentPawnSpeed = 0.f;
+	bIsAlive = true;
 }
 
 void UBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -20,6 +21,7 @@ void UBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (::IsValid(TryGetPawnOwner()))
 	{
 		CurrentPawnSpeed = Character->GetVelocity().Size();
+		bIsAlive = Character->GetIsAlive();
 	}
 }
 

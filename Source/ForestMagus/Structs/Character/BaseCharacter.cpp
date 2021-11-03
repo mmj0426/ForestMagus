@@ -13,12 +13,21 @@ ABaseCharacter::ABaseCharacter()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	Attributes = CreateDefaultSubobject<UFMAttributeSet>("Attributes");
+
+	bIsAlive = true;
 }
 
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	OnHPIsZero.AddLambda([this]()->void
+		{
+			bIsAlive = false;
+
+			FMLOG(Log, TEXT("HP is Zero"));
+
+		});
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
@@ -115,6 +124,11 @@ void ABaseCharacter::HandleDamage(float DamageAmount, const FHitResult& HitInfo,
 void ABaseCharacter::HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
 {
 	OnHealthChanged(DeltaValue, EventTags);
+
+	if (GetCurrentHealth() <= 0.f)
+	{
+		OnHPIsZero.Broadcast();
+	}
 }
 
 void ABaseCharacter::HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
@@ -127,7 +141,7 @@ void ABaseCharacter::GetActiveAbilitiesWithTags(const FGameplayTagContainer& Gam
 	AbilitySystemComponent->GetActiveAbilitiesWithTags(GameplayTagContainer, ActiveAbilities);
 }
 
-float ABaseCharacter::GetHealth()
+float ABaseCharacter::GetCurrentHealth()
 {
 	return Attributes->GetHealth();
 }
@@ -135,6 +149,11 @@ float ABaseCharacter::GetHealth()
 float ABaseCharacter::GetMaxHealth()
 {
 	return Attributes->GetMaxHealth();
+}
+
+bool ABaseCharacter::GetIsAlive() const
+{
+	return bIsAlive;
 }
 
 int ABaseCharacter::GetCharacterLevel() const

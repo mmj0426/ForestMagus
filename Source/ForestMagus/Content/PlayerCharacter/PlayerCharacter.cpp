@@ -332,7 +332,7 @@ void APlayerCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagC
 	auto PlayerController = Cast<APlayerController>(GetController());
 	auto Widget = Cast<AGameHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
 
-	Widget->SetPlayerHealth(FMath::Clamp<float>((GetHealth()/100),0.f,1.f));
+	Widget->SetPlayerHealth(FMath::Clamp<float>((GetCurrentHealth()/100),0.f,1.f));
 }
 
 void APlayerCharacter::ShowDecal(bool CanShow)
@@ -362,6 +362,7 @@ void APlayerCharacter::BeginPlay()
 	FragmentAbilities.Emplace(EFMAbilityInputID::Q,nullptr);
 	FragmentAbilities.Emplace(EFMAbilityInputID::E, nullptr);
 	FragmentAbilities.Emplace(EFMAbilityInputID::R, nullptr);
+
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
