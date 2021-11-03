@@ -3,6 +3,8 @@
 #include "Structs/Abilities/FMGameplayAbility.h"
 #include "Structs/Abilities/FMAttributeSet.h"
 
+#include "Components/CapsuleComponent.h"
+
 ABaseCharacter::ABaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -25,8 +27,7 @@ void ABaseCharacter::BeginPlay()
 		{
 			bIsAlive = false;
 
-			FMLOG(Log, TEXT("HP is Zero"));
-
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		});
 }
 
