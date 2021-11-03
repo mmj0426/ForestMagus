@@ -132,6 +132,11 @@ float ABaseCharacter::GetHealth()
 	return Attributes->GetHealth();
 }
 
+float ABaseCharacter::GetMaxHealth()
+{
+	return Attributes->GetMaxHealth();
+}
+
 int ABaseCharacter::GetCharacterLevel() const
 {
 	return CharacterLevel;

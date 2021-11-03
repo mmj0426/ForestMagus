@@ -36,4 +36,7 @@ public :
 	UFUNCTION()
 	void MontageEnded(UAnimMontage* Montage, bool bInterrupeted);
 
+	UFUNCTION(BlueprintCallable)
+	float GetHP_Percent();
+
 };

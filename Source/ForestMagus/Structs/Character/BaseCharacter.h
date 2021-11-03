@@ -56,6 +56,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealth();
 
+	UFUNCTION(BlueprintPure)
+	float GetMaxHealth();
+
 protected:
 	// 어빌리티 시스템
 

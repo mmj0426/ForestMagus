@@ -47,3 +47,8 @@ void ABaseMonster::MontageEnded(UAnimMontage* Montage, bool bInterrupeted)
 	FMLOG(Warning, TEXT("BaseMonster"));
 	OnAbilityEnd.Broadcast();
 }
+
+float ABaseMonster::GetHP_Percent()
+{
+	return FMath::Clamp<float>(GetHealth()/GetMaxHealth(), 0.f,1.f);
+}
