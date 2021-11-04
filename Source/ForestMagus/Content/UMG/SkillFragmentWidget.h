@@ -36,6 +36,9 @@ protected :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float PlayerHealth;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float PlayerMana;
+
 protected : 
 	virtual void NativeConstruct() override;
 	
@@ -45,5 +48,7 @@ public :
 
 	void SetIconToDefault(EFMAbilityInputID Inputkey);
 
-	void SetPlayerHealth(float CurrentHealth);
+	void SetPlayerHealthPercent(float CurrentHealthPercent);
+
+	void SetPlayerManaPercent(float CurrentManaPercent);
 };

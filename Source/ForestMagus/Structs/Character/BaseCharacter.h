@@ -56,10 +56,16 @@ public:
 	void GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<UFMGameplayAbility*>& ActiveAbilities);
 
 	UFUNCTION(BlueprintPure)
-	float GetCurrentHealth();
+	float GetCurrentHealth() const;
 
 	UFUNCTION(BlueprintPure)
-	float GetMaxHealth();
+	float GetMaxHealth() const;
+
+	UFUNCTION(BlueprintPure)
+	float GetCurrentMana() const;
+
+	UFUNCTION(BlueprintPure)
+	float GetMaxMana() const;
 
 	// Death Delegate
 	FOnHPIsZeroDelegate OnHPIsZero;

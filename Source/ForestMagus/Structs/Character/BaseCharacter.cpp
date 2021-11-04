@@ -142,14 +142,24 @@ void ABaseCharacter::GetActiveAbilitiesWithTags(const FGameplayTagContainer& Gam
 	AbilitySystemComponent->GetActiveAbilitiesWithTags(GameplayTagContainer, ActiveAbilities);
 }
 
-float ABaseCharacter::GetCurrentHealth()
+float ABaseCharacter::GetCurrentHealth() const
 {
 	return Attributes->GetHealth();
 }
 
-float ABaseCharacter::GetMaxHealth()
+float ABaseCharacter::GetMaxHealth() const
 {
 	return Attributes->GetMaxHealth();
+}
+
+float ABaseCharacter::GetCurrentMana() const
+{
+	return Attributes->GetMana();
+}
+
+float ABaseCharacter::GetMaxMana() const
+{
+	return Attributes->GetMaxMana();
 }
 
 bool ABaseCharacter::GetIsAlive() const

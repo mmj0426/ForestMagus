@@ -324,7 +324,8 @@ bool APlayerCharacter::CanMove() const
 
 bool APlayerCharacter::CanTeleportation() const
 {
-	return (CurrentState != EFMPlayerState::Attacking);
+	// TODO : && (GetCurrentMana() >= 텔레포트 사용 마나..)
+	return ((CurrentState != EFMPlayerState::Attacking) && ((GetCurrentMana() >= 20.f) ? true : false));
 }
 
 void APlayerCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagContainer& EventTags)
@@ -332,7 +333,15 @@ void APlayerCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagC
 	auto PlayerController = Cast<APlayerController>(GetController());
 	auto Widget = Cast<AGameHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
 
-	Widget->SetPlayerHealth(FMath::Clamp<float>((GetCurrentHealth()/100),0.f,1.f));
+	Widget->SetPlayerHealthPercent(FMath::Clamp<float>((GetCurrentHealth()/GetMaxHealth()),0.f,1.f));
+}
+
+void APlayerCharacter::HandleManaChanged(float DeltaValue, const FGameplayTagContainer& EventTags)
+{
+	auto PlayerController = Cast<APlayerController>(GetController());
+	auto Widget = Cast<AGameHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
+
+	Widget->SetPlayerManaPercent(FMath::Clamp<float>((GetCurrentMana() / GetMaxMana()), 0.f, 1.f));
 }
 
 void APlayerCharacter::ShowDecal(bool CanShow)
@@ -357,7 +366,8 @@ void APlayerCharacter::BeginPlay()
 	auto PlayerController = Cast<APlayerController>(GetController());
 	auto Widget = Cast<AGameHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
 
-	Widget->SetPlayerHealth(1.f);
+	Widget->SetPlayerHealthPercent(1.f);
+	Widget->SetPlayerManaPercent(1.f);
 
 	FragmentAbilities.Emplace(EFMAbilityInputID::Q,nullptr);
 	FragmentAbilities.Emplace(EFMAbilityInputID::E, nullptr);

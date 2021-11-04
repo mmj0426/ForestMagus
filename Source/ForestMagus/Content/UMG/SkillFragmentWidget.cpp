@@ -63,7 +63,12 @@ void USkillFragmentWidget::SetIconToDefault(EFMAbilityInputID Inputkey)
 	}
 }
 
-void USkillFragmentWidget::SetPlayerHealth(float CurrentHealth)
+void USkillFragmentWidget::SetPlayerHealthPercent(float CurrentHealthPercent)
 {
-	PlayerHealth = CurrentHealth;
+	PlayerHealth = CurrentHealthPercent;
+}
+
+void USkillFragmentWidget::SetPlayerManaPercent(float CurrentManaPercent)
+{
+	PlayerMana = CurrentManaPercent;
 }

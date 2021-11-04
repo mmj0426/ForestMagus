@@ -22,7 +22,7 @@ void UFMAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, fl
 	}
 	else if (Attribute == GetMaxManaAttribute())
 	{
-		SetMana(GetMaxMana());
+		AbilityComp->ApplyModToAttributeUnsafe(GetManaAttribute(), EGameplayModOp::Additive, NewValue);
 	}
 }
 

@@ -69,6 +69,7 @@ public:
 
 public : 
 	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+	virtual void HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 
 	// 범위형 스킬 
 	UFUNCTION(BlueprintCallable)
