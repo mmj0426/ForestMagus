@@ -64,12 +64,12 @@ APlayerCharacter::APlayerCharacter()
 	// 커서 위치에 데칼 생성
 	RangeDecal = CreateDefaultSubobject<UDecalComponent>("RangeDecal");
 	RangeDecal->SetupAttachment(RootComponent);
-	static ConstructorHelpers::FObjectFinder<UMaterial> DecalMaterialAsset(TEXT("/Game/Materials/Decal/M_Cursor_Decal.M_Cursor_Decal"));
-	if (DecalMaterialAsset.Succeeded())
-	{
-		RangeDecal->SetDecalMaterial(DecalMaterialAsset.Object);
-	}
-	RangeDecal->DecalSize = FVector(48.0f, 96.0f, 96.0f);
+	//static ConstructorHelpers::FObjectFinder<UMaterial> DecalMaterialAsset(TEXT("/Game/StylizedVFX-AirStrikes/Materials/MaterialInstances/MI_Circle_01.MI_Circle_01"));
+	//if (DecalMaterialAsset.Succeeded())
+	//{
+	//	RangeDecal->SetDecalMaterial(DecalMaterialAsset.Object);
+	//}
+	//RangeDecal->DecalSize = FVector(48.0f, 96.0f, 96.0f);
 	RangeDecal->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
 
 	RangeDecal->SetHiddenInGame(true);
