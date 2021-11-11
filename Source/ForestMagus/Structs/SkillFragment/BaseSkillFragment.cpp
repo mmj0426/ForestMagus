@@ -37,7 +37,7 @@ void ABaseSkillFragment::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAc
 	{
 		if (PlayerCharacter->CanGetSkillFragment())
 		{
-			PlayerCharacter->SetAbility(SkillAbility,SkillIcon);
+			PlayerCharacter->SetAbility(false,SkillAbility,SkillIcon);
 			Destroy();
 		}
 	}

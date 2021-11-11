@@ -48,7 +48,7 @@ public:
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	//class UPlayerCharacterAnimInstance* PlayerAnim;
 
-	// 텔레포트 - 블루프린트 함수 정의
+	// 텔레포트 - 블루프린트 이벤트
 	UFUNCTION(BlueprintImplementableEvent,Category = Teleportation)
 	void Teleportation();
 
@@ -85,17 +85,21 @@ public :
 	bool GetCrosshairHitResult(FHitResult& Result);
 
 	// 스킬파편 획득 후 스킬 등록
-	void SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon);
+	UFUNCTION(BlueprintCallable)
+	void SetAbility(bool IsFixedSkill,TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon);
 
 public : 
 
 	// 행동 조건 (제약)
-	bool CanGetSkillFragment();
+	bool CanGetSkillFragment() const;
 
 	bool CanMove() const;
 
 	UFUNCTION(BlueprintCallable)
 	bool CanTeleportation() const;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	bool CanNPCInteraction;
 
 private : 
 	// 마우스 커서 데칼

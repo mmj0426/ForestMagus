@@ -31,6 +31,7 @@ void APlayerCharacterController::SetupInputComponent()
 
 	// 액션 매핑 바인드
 	InputComponent->BindAction(TEXT("Teleportation"), EInputEvent::IE_Pressed, this, &APlayerCharacterController::Teleportation);
+
 }
 
 void APlayerCharacterController::MoveForward(float NewAxisValue)

@@ -102,6 +102,8 @@ APlayerCharacter::APlayerCharacter()
 	}
 
 	CurrentState = EFMPlayerState::None;
+
+	CanNPCInteraction = false;
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)
@@ -165,31 +167,46 @@ void APlayerCharacter::OnSkillKeyPressed()
 		return;
 	}
 
-	// 발사형일 경우
-	if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Firing)
+	if (InputKey == EFMAbilityInputID::F)
 	{
-		// Give Ability and Active Once
-		if (HasAuthority() && AbilitySystemComponent)
+		FMLOG(Warning, TEXT("InputKey is F"));
+		if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
 		{
-			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[InputKey], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[InputKey].GetDefaultObject()->AbilityInputID), this);
-			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
+			FMLOG(Warning, TEXT("Ability Type is not Range"));
+			ShowDecal(true);
+
+			CastingID = InputKey;
 		}
-
-		// UI를 비어있는(Default) 이미지로 바꿔줌
-		auto SkillFragmentWidget = Cast<AGameHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD())->GetSkillFragmentWidget();
-		SkillFragmentWidget->SetIconToDefault(InputKey);
-
-		FragmentAbilities[InputKey] = nullptr;
-
-		return;
 	}
-	// 범위형일 경우
-	else if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
+	else
 	{
-		ShowDecal(true);
-		
-		CastingID = InputKey;
+		// 발사형일 경우
+		if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Firing)
+		{
+			// Give Ability and Active Once
+			if (HasAuthority() && AbilitySystemComponent)
+			{
+				auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[InputKey], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[InputKey].GetDefaultObject()->AbilityInputID), this);
+				AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
+			}
+
+			// UI를 비어있는(Default) 이미지로 바꿔줌
+			auto SkillFragmentWidget = Cast<AGameHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD())->GetSkillFragmentWidget();
+			SkillFragmentWidget->SetIconToDefault(InputKey);
+
+			FragmentAbilities[InputKey] = nullptr;
+
+			return;
+		}
+		// 범위형일 경우
+		else if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
+		{
+			ShowDecal(true);
+
+			CastingID = InputKey;
+		}
 	}
+
 }
 
 void APlayerCharacter::UseSkill_Pressed()
@@ -253,31 +270,47 @@ void APlayerCharacter::SeparateSkillKey(FKey key)
 		{
 			InputKey = EFMAbilityInputID::R;
 		}
+		else if (KeyName.ToString() == TEXT("F"))
+		{
+			InputKey = EFMAbilityInputID::F;
+		}
+
 
 		OnSkillKeyPressed();
 	}
 
 }
 
-void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon)
+void APlayerCharacter::SetAbility(bool IsFixedSkill, TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon)
 {
 	EFMAbilityInputID SkillSlot;
-	
-	// 스킬 슬롯이 비어있는 상태면 Q > E > R 순으로 채운다.
-	if (FragmentAbilities[EFMAbilityInputID::Q] == nullptr)
+
+	if (IsFixedSkill)
 	{
-		FragmentAbilities[EFMAbilityInputID::Q] = SkillAbility;
-		SkillSlot = EFMAbilityInputID::Q;
+		if (FragmentAbilities[EFMAbilityInputID::F] == nullptr)
+		{
+			FragmentAbilities[EFMAbilityInputID::F] = SkillAbility;
+			SkillSlot = EFMAbilityInputID::F;
+		}
 	}
-	else if (FragmentAbilities[EFMAbilityInputID::E] == nullptr)
+	else
 	{
-		FragmentAbilities[EFMAbilityInputID::E] = SkillAbility;
-		SkillSlot = EFMAbilityInputID::E;
-	}
-	else if (FragmentAbilities[EFMAbilityInputID::R] == nullptr)
-	{
-		FragmentAbilities[EFMAbilityInputID::R] = SkillAbility;
-		SkillSlot = EFMAbilityInputID::R;
+		// 스킬 슬롯이 비어있는 상태면 Q > E > R 순으로 채운다.
+		if (FragmentAbilities[EFMAbilityInputID::Q] == nullptr)
+		{
+			FragmentAbilities[EFMAbilityInputID::Q] = SkillAbility;
+			SkillSlot = EFMAbilityInputID::Q;
+		}
+		else if (FragmentAbilities[EFMAbilityInputID::E] == nullptr)
+		{
+			FragmentAbilities[EFMAbilityInputID::E] = SkillAbility;
+			SkillSlot = EFMAbilityInputID::E;
+		}
+		else if (FragmentAbilities[EFMAbilityInputID::R] == nullptr)
+		{
+			FragmentAbilities[EFMAbilityInputID::R] = SkillAbility;
+			SkillSlot = EFMAbilityInputID::R;
+		}
 	}
 
 	// 해당 키에 해당하는 스킬 슬롯 UI에 스킬 아이콘을 적용시켜줌
@@ -285,7 +318,7 @@ void APlayerCharacter::SetAbility(TSubclassOf<UFMGameplayAbility> SkillAbility, 
 	SkillFragmentWidget->SetSkill_Icon(SkillSlot,SkillIcon);
 }
 
-bool APlayerCharacter::CanGetSkillFragment()
+bool APlayerCharacter::CanGetSkillFragment() const
 {
 	for (auto it = FragmentAbilities.CreateConstIterator(); it; ++it)
 	{
@@ -325,7 +358,9 @@ bool APlayerCharacter::CanMove() const
 bool APlayerCharacter::CanTeleportation() const
 {
 	// TODO : && (GetCurrentMana() >= 텔레포트 사용 마나..)
-	return ((CurrentState != EFMPlayerState::Attacking) && ((GetCurrentMana() >= 20.f) ? true : false));
+	return ((CurrentState != EFMPlayerState::Attacking) 
+		&& ((GetCurrentMana() >= 20.f) ? true : false) 
+		&& (!CanNPCInteraction));
 }
 
 void APlayerCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagContainer& EventTags)
@@ -372,6 +407,7 @@ void APlayerCharacter::BeginPlay()
 	FragmentAbilities.Emplace(EFMAbilityInputID::Q,nullptr);
 	FragmentAbilities.Emplace(EFMAbilityInputID::E, nullptr);
 	FragmentAbilities.Emplace(EFMAbilityInputID::R, nullptr);
+	FragmentAbilities.Emplace(EFMAbilityInputID::F, nullptr);
 
 }
 
