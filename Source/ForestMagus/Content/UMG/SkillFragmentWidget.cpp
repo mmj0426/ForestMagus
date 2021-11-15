@@ -35,7 +35,7 @@ void USkillFragmentWidget::SetSkill_Icon(EFMAbilityInputID Inputkey, UTexture2D*
 		break;
 	}
 
-	FMLOG(Warning, TEXT("SkillFragmentWidget - SetSkill Icon"));
+	FMLOG(Warning, TEXT("SkillFragmentWidgetClass - SetSkill Icon"));
 }
 
 void USkillFragmentWidget::SetIconToDefault(EFMAbilityInputID Inputkey)
