@@ -121,15 +121,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	InputComponent->BindAction(TEXT("BasicAttack"), EInputEvent::IE_Pressed, this, &APlayerCharacter::BasicAttack);
 }
 
-void APlayerCharacter::EndRangeSkill()
-{
-	// Clear Ability
-	//auto ActivatableSkillArray = AbilitySystemComponent->GetActivatableAbilities();
-	//AbilitySystemComponent->ClearAbility(ActivatableSkillArray[1].Handle);
-
-	FMLOG(Warning, TEXT("EndRangeSkill"));
-
-}
+//void APlayerCharacter::EndRangeSkill()
+//{
+//	// Clear Ability
+//	//auto ActivatableSkillArray = AbilitySystemComponent->GetActivatableAbilities();
+//	//AbilitySystemComponent->ClearAbility(ActivatableSkillArray[1].Handle);
+//
+//	FMLOG(Warning, TEXT("EndRangeSkill"));
+//
+//}
 
 bool APlayerCharacter::GetCrosshairHitResult(FHitResult& Result)
 {
@@ -412,8 +412,7 @@ void APlayerCharacter::BeginPlay()
 	FragmentAbilities.Emplace(EFMAbilityInputID::R, nullptr);
 	FragmentAbilities.Emplace(EFMAbilityInputID::F, nullptr);
 
-
-
+	GetWorldTimerManager().SetTimer(RecoverMana_TimerHandle,this, &APlayerCharacter::RecoverMana,1.f,true);
 }
 
 void APlayerCharacter::Tick(float DeltaTime)

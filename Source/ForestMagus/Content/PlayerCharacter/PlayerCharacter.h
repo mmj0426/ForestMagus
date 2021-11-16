@@ -75,8 +75,8 @@ public :
 	UFUNCTION(BlueprintCallable)
 	void ShowDecal(bool CanShow);
 
-	UFUNCTION(BlueprintCallable)
-	void EndRangeSkill();
+	//UFUNCTION(BlueprintCallable)
+	//void EndRangeSkill();
 
 	void DrawRangeDecal();
 
@@ -87,6 +87,9 @@ public :
 	// 스킬파편 획득 후 스킬 등록
 	UFUNCTION(BlueprintCallable)
 	void SetAbility(bool IsFixedSkill,TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void RecoverMana();
 
 public : 
 
@@ -122,5 +125,8 @@ private :
 	void BasicAttack();
 
 	void SeparateSkillKey(FKey key);
+
+	// 타이머
+	FTimerHandle RecoverMana_TimerHandle;
 
 };
