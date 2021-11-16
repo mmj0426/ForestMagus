@@ -223,8 +223,11 @@ void APlayerCharacter::UseSkill_Pressed()
 		FragmentAbilities[CastingID] = nullptr;
 
 		// UI를 비어있는(Default) 이미지로 바꿔줌
-		auto SkillFragmentWidget = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD())->GetSkillFragmentWidget();
-		SkillFragmentWidget->SetIconToDefault(InputKey);
+		auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+		if (HUD != nullptr)
+		{
+			HUD->GetSkillFragmentWidget()->SetIconToDefault(InputKey);
+		}
 
 		CastingID = EFMAbilityInputID::None;
 	}
@@ -314,8 +317,11 @@ void APlayerCharacter::SetAbility(bool IsFixedSkill, TSubclassOf<UFMGameplayAbil
 	}
 
 	// 해당 키에 해당하는 스킬 슬롯 UI에 스킬 아이콘을 적용시켜줌
-	auto SkillFragmentWidget = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(),0)->GetHUD())->GetSkillFragmentWidget();
-	SkillFragmentWidget->SetSkill_Icon(SkillSlot,SkillIcon);
+	auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(),0)->GetHUD());
+	if (HUD	!= nullptr)
+	{
+		HUD->GetSkillFragmentWidget()->SetSkill_Icon(SkillSlot,SkillIcon);
+	}
 }
 
 bool APlayerCharacter::CanGetSkillFragment() const
@@ -366,17 +372,23 @@ bool APlayerCharacter::CanTeleportation() const
 void APlayerCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagContainer& EventTags)
 {
 	auto PlayerController = Cast<APlayerController>(GetController());
-	auto Widget = Cast<ADungeonHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
+	auto HUD = Cast<ADungeonHUD>(PlayerController->GetHUD());
+	if (HUD != nullptr)
+	{
+		HUD->GetSkillFragmentWidget()->SetPlayerHealthPercent(FMath::Clamp<float>((GetCurrentHealth()/GetMaxHealth()),0.f,1.f));
+	}
 
-	Widget->SetPlayerHealthPercent(FMath::Clamp<float>((GetCurrentHealth()/GetMaxHealth()),0.f,1.f));
 }
 
 void APlayerCharacter::HandleManaChanged(float DeltaValue, const FGameplayTagContainer& EventTags)
 {
 	auto PlayerController = Cast<APlayerController>(GetController());
-	auto Widget = Cast<ADungeonHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
+	auto HUD = Cast<ADungeonHUD>(PlayerController->GetHUD());
+	if (HUD != nullptr)
+	{
+		HUD->GetSkillFragmentWidget()->SetPlayerManaPercent(FMath::Clamp<float>((GetCurrentMana() / GetMaxMana()), 0.f, 1.f));
+	}
 
-	Widget->SetPlayerManaPercent(FMath::Clamp<float>((GetCurrentMana() / GetMaxMana()), 0.f, 1.f));
 }
 
 void APlayerCharacter::ShowDecal(bool CanShow)
@@ -401,10 +413,13 @@ void APlayerCharacter::BeginPlay()
 	// TODO : 게임모드가 DungeonGameMode일 때만 
 	{
 		auto PlayerController = Cast<APlayerController>(GetController());
-		auto Widget = Cast<ADungeonHUD>(PlayerController->GetHUD())->GetSkillFragmentWidget();
+		auto HUD = Cast<ADungeonHUD>(PlayerController->GetHUD());
+		if (HUD != nullptr)
+		{
+			HUD->GetSkillFragmentWidget()->SetPlayerHealthPercent(1.f);
+			HUD->GetSkillFragmentWidget()->SetPlayerManaPercent(1.f);
+		}
 
-		Widget->SetPlayerHealthPercent(1.f);
-		Widget->SetPlayerManaPercent(1.f);
 	}
 
 	FragmentAbilities.Emplace(EFMAbilityInputID::Q, nullptr);
