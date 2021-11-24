@@ -114,7 +114,7 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
+
 	InputComponent->BindAction(TEXT("FragmentSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SeparateSkillKey);
 
 	InputComponent->BindAction(TEXT("UseSkill"), EInputEvent::IE_Pressed, this, &APlayerCharacter::UseSkill_Pressed);
@@ -152,7 +152,7 @@ bool APlayerCharacter::GetCrosshairHitResult(FHitResult& Result)
 	bool bResult = UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), CameraLocation, Forward + CameraLocation, CrosshairObjectTypes,
 		true, ActorsToIgnore, Debug, HitResult, true);
 
-	if(bResult)
+	if (bResult)
 	{
 		Result = HitResult;
 	}
@@ -172,7 +172,6 @@ void APlayerCharacter::OnSkillKeyPressed()
 		FMLOG(Warning, TEXT("InputKey is F"));
 		if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
 		{
-			FMLOG(Warning, TEXT("Ability Type is not Range"));
 			ShowDecal(true);
 
 			CastingID = InputKey;
@@ -213,23 +212,35 @@ void APlayerCharacter::UseSkill_Pressed()
 {
 	if (CastingID != EFMAbilityInputID::None)
 	{
-		// Give Ability and Active Once
-		if (HasAuthority() && AbilitySystemComponent)
+		// 고정스킬일 경우 GiveAbility
+		if (CastingID == EFMAbilityInputID::F && HasAuthority() && AbilitySystemComponent)
 		{
 			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[InputKey], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[InputKey].GetDefaultObject()->AbilityInputID), this);
 			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
+
+			CastingID = EFMAbilityInputID::None;
 		}
-
-		FragmentAbilities[CastingID] = nullptr;
-
-		// UI를 비어있는(Default) 이미지로 바꿔줌
-		auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
-		if (HUD != nullptr)
+		// Give Ability and Active Once
+		else if (HasAuthority() && AbilitySystemComponent)
 		{
-			HUD->GetSkillFragmentWidget()->SetIconToDefault(InputKey);
+			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[InputKey], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[InputKey].GetDefaultObject()->AbilityInputID), this);
+			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
+
+
+			FragmentAbilities[CastingID] = nullptr;
+
+			// UI를 비어있는(Default) 이미지로 바꿔줌
+			auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+			if (HUD != nullptr)
+			{
+				HUD->GetSkillFragmentWidget()->SetIconToDefault(InputKey);
+			}
+
+			CastingID = EFMAbilityInputID::None;
 		}
 
-		CastingID = EFMAbilityInputID::None;
+		ShowDecal(false);
+
 	}
 }
 
@@ -244,7 +255,7 @@ void APlayerCharacter::BasicAttack()
 		FMLOG(Warning, TEXT("Cancel the RangeSkill"));
 
 	}
-	
+
 	// And play basic attack 
 	if (HasAuthority() && AbilitySystemComponent)
 	{
@@ -257,7 +268,7 @@ void APlayerCharacter::BasicAttack()
 void APlayerCharacter::SeparateSkillKey(FKey key)
 {
 	// 키 입력 분리
-	if(CastingID == EFMAbilityInputID::None)
+	if (CastingID == EFMAbilityInputID::None)
 	{
 		FName KeyName = key.GetFName();
 
@@ -317,10 +328,10 @@ void APlayerCharacter::SetAbility(bool IsFixedSkill, TSubclassOf<UFMGameplayAbil
 	}
 
 	// 해당 키에 해당하는 스킬 슬롯 UI에 스킬 아이콘을 적용시켜줌
-	auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(),0)->GetHUD());
-	if (HUD	!= nullptr)
+	auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+	if (HUD != nullptr)
 	{
-		HUD->GetSkillFragmentWidget()->SetSkill_Icon(SkillSlot,SkillIcon);
+		HUD->GetSkillFragmentWidget()->SetSkill_Icon(SkillSlot, SkillIcon);
 	}
 }
 
@@ -339,8 +350,8 @@ bool APlayerCharacter::CanGetSkillFragment() const
 
 void APlayerCharacter::DrawRangeDecal()
 {
-	if(false == bCanShowCursorDecal)
-	{ 
+	if (false == bCanShowCursorDecal)
+	{
 		return;
 	}
 
@@ -358,14 +369,14 @@ void APlayerCharacter::DrawRangeDecal()
 bool APlayerCharacter::CanMove() const
 {
 	return ((CurrentState != EFMPlayerState::Teleportation)
-			&& (CurrentState != EFMPlayerState::Attacking)) ;
+		&& (CurrentState != EFMPlayerState::Attacking));
 }
 
 bool APlayerCharacter::CanTeleportation() const
 {
 	// TODO : && (GetCurrentMana() >= 텔레포트 사용 마나..)
-	return ((CurrentState != EFMPlayerState::Attacking) 
-		&& ((GetCurrentMana() >= 20.f) ? true : false) 
+	return ((CurrentState != EFMPlayerState::Attacking)
+		&& ((GetCurrentMana() >= 20.f) ? true : false)
 		&& (!CanNPCInteraction));
 }
 
@@ -375,7 +386,7 @@ void APlayerCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagC
 	auto HUD = Cast<ADungeonHUD>(PlayerController->GetHUD());
 	if (HUD != nullptr)
 	{
-		HUD->GetSkillFragmentWidget()->SetPlayerHealthPercent(FMath::Clamp<float>((GetCurrentHealth()/GetMaxHealth()),0.f,1.f));
+		HUD->GetSkillFragmentWidget()->SetPlayerHealthPercent(FMath::Clamp<float>((GetCurrentHealth() / GetMaxHealth()), 0.f, 1.f));
 	}
 
 }
@@ -427,7 +438,7 @@ void APlayerCharacter::BeginPlay()
 	FragmentAbilities.Emplace(EFMAbilityInputID::R, nullptr);
 	FragmentAbilities.Emplace(EFMAbilityInputID::F, nullptr);
 
-	GetWorldTimerManager().SetTimer(RecoverMana_TimerHandle,this, &APlayerCharacter::RecoverMana,1.f,true);
+	GetWorldTimerManager().SetTimer(RecoverMana_TimerHandle, this, &APlayerCharacter::RecoverMana, 1.f, true);
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
