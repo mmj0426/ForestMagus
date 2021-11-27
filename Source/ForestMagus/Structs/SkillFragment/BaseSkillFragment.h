@@ -33,6 +33,6 @@ protected:
 	TSubclassOf<UFMGameplayAbility> SkillAbility;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UTexture2D* SkillIcon;
+	class UMaterial* SkillIcon;
 
 };

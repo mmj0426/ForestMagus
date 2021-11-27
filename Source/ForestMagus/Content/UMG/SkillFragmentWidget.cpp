@@ -11,31 +11,31 @@ void USkillFragmentWidget::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-void USkillFragmentWidget::SetSkill_Icon(EFMAbilityInputID Inputkey, UTexture2D* Skill_Icon)
+void USkillFragmentWidget::SetSkill_Icon(EFMAbilityInputID Inputkey, UMaterial* Skill_Icon)
 {
 	switch (Inputkey)
 	{
 	case EFMAbilityInputID::Q:
-		QSkill_Icon->SetBrushFromTexture(Skill_Icon);
+		QSkill_Icon->SetBrushFromMaterial(Skill_Icon);
 		break;
 
 	case EFMAbilityInputID::E:
-		ESkill_Icon->SetBrushFromTexture(Skill_Icon);
+		ESkill_Icon->SetBrushFromMaterial(Skill_Icon);
 		break;
 
 	case EFMAbilityInputID::R:
-		RSkill_Icon->SetBrushFromTexture(Skill_Icon);
+		RSkill_Icon->SetBrushFromMaterial(Skill_Icon);
 		break;
 
 	case EFMAbilityInputID::F:
-		FSkill_Icon->SetBrushFromTexture(Skill_Icon);
+		FSkill_Icon->SetBrushFromMaterial(Skill_Icon);
 		break;
 
 	default:
 		break;
 	}
 
-	FMLOG(Warning, TEXT("SkillFragmentWidgetClass - SetSkill Icon"));
+	FMLOG(Warning, TEXT("SkillFragmentWidgetClass - SetSkill Icon")) ;
 }
 
 void USkillFragmentWidget::SetIconToDefault(EFMAbilityInputID Inputkey)
@@ -43,19 +43,19 @@ void USkillFragmentWidget::SetIconToDefault(EFMAbilityInputID Inputkey)
 	switch (Inputkey)
 	{
 	case EFMAbilityInputID::Q:
-		QSkill_Icon->SetBrushFromTexture(DefaulIconTexture);
+		QSkill_Icon->SetBrushFromMaterial(DefaulIconTexture);
 		break;
 
 	case EFMAbilityInputID::E:
-		ESkill_Icon->SetBrushFromTexture(DefaulIconTexture);
+		ESkill_Icon->SetBrushFromMaterial(DefaulIconTexture);
 		break;
 
 	case EFMAbilityInputID::R:
-		RSkill_Icon->SetBrushFromTexture(DefaulIconTexture);
+		RSkill_Icon->SetBrushFromMaterial(DefaulIconTexture);
 		break;
 
 	case EFMAbilityInputID::F:
-		FSkill_Icon->SetBrushFromTexture(DefaulIconTexture);
+		FSkill_Icon->SetBrushFromMaterial(DefaulIconTexture);
 		break;
 
 	default:

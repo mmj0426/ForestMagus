@@ -28,6 +28,7 @@ protected:
 	
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndplayReason) override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PossessedBy(AController* NewController)override;
@@ -86,10 +87,13 @@ public :
 
 	// 스킬파편 획득 후 스킬 등록
 	UFUNCTION(BlueprintCallable)
-	void SetAbility(bool IsFixedSkill,TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon);
+	void SetAbility(bool IsFixedSkill,TSubclassOf<UFMGameplayAbility> SkillAbility, UMaterial* SkillIcon);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void RecoverMana();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetCooldownRate();
 
 public : 
 
@@ -103,6 +107,12 @@ public :
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	bool CanNPCInteraction;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsCooldown;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+	float Cooldown;
 
 private : 
 	// 마우스 커서 데칼
@@ -128,5 +138,6 @@ private :
 
 	// 타이머
 	FTimerHandle RecoverMana_TimerHandle;
+	FTimerHandle SkillCooldown_TimerHandle;
 
 };

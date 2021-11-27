@@ -24,6 +24,7 @@ public :
 	UPROPERTY(EditAnywhere, Category = "UMG")
 		TSubclassOf<USkillFragmentWidget> SkillFragmentWidget;
 
+	UFUNCTION(BlueprintCallable)
 	USkillFragmentWidget* GetSkillFragmentWidget();
 
 private:

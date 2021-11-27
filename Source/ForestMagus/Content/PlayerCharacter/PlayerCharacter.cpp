@@ -104,6 +104,8 @@ APlayerCharacter::APlayerCharacter()
 	CurrentState = EFMPlayerState::None;
 
 	CanNPCInteraction = false;
+
+	bIsCooldown = false;
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)
@@ -169,13 +171,17 @@ void APlayerCharacter::OnSkillKeyPressed()
 
 	if (InputKey == EFMAbilityInputID::F)
 	{
-		FMLOG(Warning, TEXT("InputKey is F"));
-		if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
+		if (!bIsCooldown)
 		{
-			ShowDecal(true);
+			if (FragmentAbilities[InputKey].GetDefaultObject()->AbilityType == EFMAbilityType::Range)
+			{
+				ShowDecal(true);
 
-			CastingID = InputKey;
+				CastingID = InputKey;
+			}
 		}
+		else return;
+
 	}
 	else
 	{
@@ -218,7 +224,16 @@ void APlayerCharacter::UseSkill_Pressed()
 			auto AbilitySpec = FGameplayAbilitySpec(FragmentAbilities[InputKey], GetCharacterLevel(), static_cast<int32>(FragmentAbilities[InputKey].GetDefaultObject()->AbilityInputID), this);
 			AbilitySystemComponent->GiveAbilityAndActivateOnce(AbilitySpec);
 
+			bIsCooldown = true;
 			CastingID = EFMAbilityInputID::None;
+
+			GetWorldTimerManager().SetTimer(SkillCooldown_TimerHandle, [&]()
+			{
+				FMLOG(Warning,TEXT("bIsCooltime is false"));
+				bIsCooldown = false;
+				GetWorldTimerManager().ClearTimer(SkillCooldown_TimerHandle);
+			}, Cooldown, true);
+
 		}
 		// Give Ability and Active Once
 		else if (HasAuthority() && AbilitySystemComponent)
@@ -295,7 +310,7 @@ void APlayerCharacter::SeparateSkillKey(FKey key)
 
 }
 
-void APlayerCharacter::SetAbility(bool IsFixedSkill, TSubclassOf<UFMGameplayAbility> SkillAbility, UTexture2D* SkillIcon)
+void APlayerCharacter::SetAbility(bool IsFixedSkill, TSubclassOf<UFMGameplayAbility> SkillAbility, UMaterial* SkillIcon)
 {
 	EFMAbilityInputID SkillSlot;
 
@@ -439,6 +454,19 @@ void APlayerCharacter::BeginPlay()
 	FragmentAbilities.Emplace(EFMAbilityInputID::F, nullptr);
 
 	GetWorldTimerManager().SetTimer(RecoverMana_TimerHandle, this, &APlayerCharacter::RecoverMana, 1.f, true);
+}
+
+void APlayerCharacter::EndPlay(const EEndPlayReason::Type EndplayReason)
+{
+	// 타이머 해제
+	if (GetWorldTimerManager().IsTimerActive(RecoverMana_TimerHandle))
+	{
+		GetWorldTimerManager().ClearTimer(RecoverMana_TimerHandle);
+	}
+	if (GetWorldTimerManager().IsTimerActive(SkillCooldown_TimerHandle))
+	{
+		GetWorldTimerManager().ClearTimer(SkillCooldown_TimerHandle);
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)

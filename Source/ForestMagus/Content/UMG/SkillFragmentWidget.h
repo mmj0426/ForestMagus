@@ -31,7 +31,7 @@ protected :
 	class UImage* FSkill_Icon;
 
 	UPROPERTY(BlueprintReadWrite)
-	class UTexture2D* DefaulIconTexture;
+	class UMaterial* DefaulIconTexture;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float PlayerHealth;
@@ -44,7 +44,7 @@ protected :
 	
 public : 
 
-	void SetSkill_Icon(EFMAbilityInputID Inputkey, UTexture2D* Skill_Icon);
+	void SetSkill_Icon(EFMAbilityInputID Inputkey, UMaterial* Skill_Icon);
 
 	void SetIconToDefault(EFMAbilityInputID Inputkey);
 
