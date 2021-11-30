@@ -244,8 +244,8 @@ void APlayerCharacter::UseSkill_Pressed()
 
 			FragmentAbilities[CastingID] = nullptr;
 
-			// UI를 비어있는(Default) 이미지로 바꿔줌
-			auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+			//UI를 비어있는(Default) 이미지로 바꿔줌
+				auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
 			if (HUD != nullptr)
 			{
 				HUD->GetSkillFragmentWidget()->SetIconToDefault(InputKey);
