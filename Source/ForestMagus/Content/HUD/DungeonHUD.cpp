@@ -23,9 +23,19 @@ void ADungeonHUD::BeginPlay()
 			SkillFragmentWidgetClass->AddToViewport();
 		}
 	}
+
+	if (DeathWidget)
+	{
+		DeathWidgetClass = CreateWidget<UUserWidget>(GetWorld(),DeathWidget);
+	}
 }
 
 USkillFragmentWidget* ADungeonHUD::GetSkillFragmentWidget()
 {
 	return SkillFragmentWidgetClass;
+}
+
+UUserWidget* ADungeonHUD::GetDeathWidget()
+{
+	return DeathWidgetClass;
 }

@@ -22,13 +22,21 @@ public :
 	virtual void BeginPlay();
 
 	UPROPERTY(EditAnywhere, Category = "UMG")
-		TSubclassOf<USkillFragmentWidget> SkillFragmentWidget;
+	TSubclassOf<USkillFragmentWidget> SkillFragmentWidget;
+
+	UPROPERTY(EditAnywhere, Category = "UMG")
+	TSubclassOf<UUserWidget> DeathWidget;
 
 	UFUNCTION(BlueprintCallable)
 	USkillFragmentWidget* GetSkillFragmentWidget();
+
+	UFUNCTION(BlueprintCallable)
+	UUserWidget* GetDeathWidget();
 
 private:
 	UPROPERTY()
 	class USkillFragmentWidget* SkillFragmentWidgetClass;
 	
+	UPROPERTY()
+	class UUserWidget* DeathWidgetClass;
 };

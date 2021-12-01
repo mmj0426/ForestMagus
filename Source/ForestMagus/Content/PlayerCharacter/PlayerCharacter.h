@@ -95,6 +95,9 @@ public :
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetCooldownRate();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void Death();
+
 public : 
 
 	// 행동 조건 (제약)

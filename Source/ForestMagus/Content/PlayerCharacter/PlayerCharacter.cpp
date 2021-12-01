@@ -228,11 +228,11 @@ void APlayerCharacter::UseSkill_Pressed()
 			CastingID = EFMAbilityInputID::None;
 
 			GetWorldTimerManager().SetTimer(SkillCooldown_TimerHandle, [&]()
-			{
-				FMLOG(Warning,TEXT("bIsCooltime is false"));
-				bIsCooldown = false;
-				GetWorldTimerManager().ClearTimer(SkillCooldown_TimerHandle);
-			}, Cooldown, true);
+				{
+					FMLOG(Warning, TEXT("bIsCooltime is false"));
+					bIsCooldown = false;
+					GetWorldTimerManager().ClearTimer(SkillCooldown_TimerHandle);
+				}, Cooldown, true);
 
 		}
 		// Give Ability and Active Once
@@ -245,7 +245,7 @@ void APlayerCharacter::UseSkill_Pressed()
 			FragmentAbilities[CastingID] = nullptr;
 
 			//UI를 비어있는(Default) 이미지로 바꿔줌
-				auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+			auto HUD = Cast<ADungeonHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
 			if (HUD != nullptr)
 			{
 				HUD->GetSkillFragmentWidget()->SetIconToDefault(InputKey);
@@ -399,11 +399,20 @@ void APlayerCharacter::HandleHealthChanged(float DeltaValue, const FGameplayTagC
 {
 	auto PlayerController = Cast<APlayerController>(GetController());
 	auto HUD = Cast<ADungeonHUD>(PlayerController->GetHUD());
+
 	if (HUD != nullptr)
 	{
 		HUD->GetSkillFragmentWidget()->SetPlayerHealthPercent(FMath::Clamp<float>((GetCurrentHealth() / GetMaxHealth()), 0.f, 1.f));
-	}
 
+		// Death
+		if (GetCurrentHealth() <= 0.f)
+		{
+			bIsAlive = false;
+			HUD->GetDeathWidget()->AddToViewport();
+
+			Death();
+		}
+	}
 }
 
 void APlayerCharacter::HandleManaChanged(float DeltaValue, const FGameplayTagContainer& EventTags)
