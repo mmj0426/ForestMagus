@@ -384,13 +384,15 @@ void APlayerCharacter::DrawRangeDecal()
 bool APlayerCharacter::CanMove() const
 {
 	return ((CurrentState != EFMPlayerState::Teleportation)
-		&& (CurrentState != EFMPlayerState::Attacking));
+		&& (CurrentState != EFMPlayerState::Attacking)
+		&& (CurrentState != EFMPlayerState::Conversation));
 }
 
 bool APlayerCharacter::CanTeleportation() const
 {
 	// TODO : && (GetCurrentMana() >= 텔레포트 사용 마나..)
 	return ((CurrentState != EFMPlayerState::Attacking)
+		&& (CurrentState != EFMPlayerState::Conversation)
 		&& ((GetCurrentMana() >= 20.f) ? true : false)
 		&& (!CanNPCInteraction));
 }
