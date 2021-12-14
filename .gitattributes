@@ -12,3 +12,4 @@ E:/ForestMagus/Content/StylizedVFX-AirStrikes/Textures filter=lfs diff=lfs merge
 E:/ForestMagus/Content/DreamscapeSeries filter=lfs diff=lfs merge=lfs -text
 E:/ForestMagus/Content/Maps/MagusMap filter=lfs diff=lfs merge=lfs -text
 F:/ForestMagus/Content/Font filter=lfs diff=lfs merge=lfs -text
+E:/ForestMagus/Content/Maps/TitleMap.umap filter=lfs diff=lfs merge=lfs -text
