@@ -131,6 +131,8 @@ private :
 	EFMAbilityInputID InputKey;
 	EFMAbilityInputID CastingID;
 
+
+
 private : 
 
 	void OnSkillKeyPressed();
